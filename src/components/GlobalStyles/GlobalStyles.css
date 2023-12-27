@@ -16,3 +16,9 @@ li {
   margin: 0;
   padding: 0;
 }
+.h-60 {
+  height: 240px !important;
+}
+.h-42 {
+  height: 168px !important;
+}

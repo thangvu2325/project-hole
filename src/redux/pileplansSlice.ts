@@ -5,6 +5,13 @@ export interface PilePlansState {
   data: PilePlanType[];
   error: string;
   loading: string;
+  filter: {
+    pileId: string;
+    pile_location: string;
+    pile_status: string;
+    pile_diameter: string;
+    pile_raked: string;
+  };
 }
 
 // Define the initial state using that type
@@ -29,14 +36,28 @@ const initialState: PilePlansState = {
   ],
   error: "",
   loading: "idle",
+  filter: {
+    pileId: "",
+    pile_location: "",
+    pile_status: "",
+    pile_diameter: "",
+    pile_raked: "",
+  },
 };
 export const pileplansSlice = createSlice({
   name: "pileplans",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {},
+  reducers: {
+    editPilePlantFilter(state, action) {
+      state.filter = {
+        ...state.filter,
+        ...action.payload,
+      };
+    },
+  },
 });
 
-// export const {  } = projectsSlice.actions;
+export const { editPilePlantFilter } = pileplansSlice.actions;
 
 export default pileplansSlice.reducer;
