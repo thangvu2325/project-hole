@@ -1,118 +1,46 @@
-import { Button, Col, Flex, Image, Row } from "antd";
-import Title from "antd/es/typography/Title";
-import { FunctionComponent } from "react";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
+import { Button } from "antd";
+import { FunctionComponent, useRef } from "react";
+import ReactToPrint from "react-to-print";
+import DocumentExportPDF from "./DocumentExportPDF";
 
 interface BoreLogProps {}
-
+export type dataType = {
+  depth: number;
+  description: string;
+};
+const data: dataType[] = [
+  { depth: 1, description: "Soil" },
+  { depth: 4, description: "Sand" },
+  { depth: 8, description: "Silt" },
+  { depth: 12, description: "Clay" },
+];
 const BoreLog: FunctionComponent<BoreLogProps> = () => {
-  const createPDF = async () => {
-    const pdf = new jsPDF("portrait", "pt", "a4");
-    const data = await html2canvas(document.querySelector("#pdf")!);
-    const img = data.toDataURL("image/png");
-    const imgProperties = pdf.getImageProperties(img);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("shipping_label.pdf");
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const componentRef = useRef<any>(null);
 
+  const handlePrint = () => {
+    // Use the ReactToPrint component to initiate the printing
+    // componentRef.current contains the reference to the component you want to print
+    if (componentRef.current) {
+      // Trigger the print action
+      componentRef.current.onPrint();
+    }
+  };
   return (
     <div style={{ background: "#fff" }}>
-      <Button type="primary" onClick={createPDF} style={{ margin: "8px 16px" }}>
-        Export
-      </Button>
-      <div style={{ padding: "24px" }} id="pdf">
-        <Flex justify="space-between" align="end">
-          <Image
-            src="https://lh3.googleusercontent.com/YTlEF8ieGq-1pj1cVtPQ_27sLYinnXMNY0ju1A2YxIp1WuA3-rkYtSxm7KCfNFTll_xrkzrMP2ZhQhv99hh2L08Q1CcSr8QQBDU=s0"
-            preview={false}
-            width={160}
-            height={70}
-          ></Image>
-          <Flex vertical>
-            <Title level={3} style={{ textAlign: "center" }}>
-              SHINEI GEOTECHNIQUE (M)SDN. BHD
-            </Title>
-            <Title level={3} style={{ textAlign: "center" }}>
-              MICROPILE BORELOG
-            </Title>
-          </Flex>
-          <Flex style={{ marginBottom: "-6px" }}>
-            <span style={{ border: "1px solid #ccc", padding: "4px 6px" }}>
-              Log No.
-            </span>
-            <span style={{ border: "1px solid #ccc", padding: "4px 6px" }}>
-              17
-            </span>
-          </Flex>
-        </Flex>
-        <div style={{ border: "1px solid #ccc", marginTop: "10px" }}>
-          <Row align={"middle"}>
-            <Col
-              span={2}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Project
-            </Col>
-            <Col
-              span={16}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Proposed Slope Remediation for Monoluxury Sdn Bhd Cameron
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Date
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              26/05/22
-            </Col>
-          </Row>
-          <Row>
-            <Col
-              span={2}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Pile No.
-            </Col>
-            <Col
-              span={8}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            ></Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Pile Dia.
-            </Col>
-            <Col
-              span={5}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              200 mm
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Rake
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Vertical
-            </Col>
-          </Row>
-        </div>
-      </div>
+      <ReactToPrint
+        trigger={() => (
+          <Button
+            type="primary"
+            style={{ margin: "8px 16px" }}
+            onClick={handlePrint}
+          >
+            Export
+          </Button>
+        )}
+        content={() => componentRef.current}
+      />
+      <DocumentExportPDF ref={componentRef} data={data}></DocumentExportPDF>
     </div>
   );
 };

@@ -13,8 +13,6 @@ const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
         style={{
           width: "1000px",
           margin: "0 auto",
-          paddingTop: "60px",
-          paddingBottom: "180px",
         }}
       >
         {children}
