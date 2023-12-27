@@ -91,6 +91,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         paddingBottom: "36px",
       }}
     >
+      <Title level={1}>Quản Lý Project</Title>
       <div
         style={{
           transition: "height",
@@ -119,7 +120,9 @@ const Home: FunctionComponent<HomeProps> = () => {
               height={20}
               className="mr-2"
             ></IconChevronDown>
-            Thông tin tìm kiếm
+            <span style={{ fontWeight: "600", fontSize: "16px" }}>
+              Thông tin tìm kiếm
+            </span>
           </Flex>
         </Title>
         <div className={`w-3/4 mx-auto mb-4`}>

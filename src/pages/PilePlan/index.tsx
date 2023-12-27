@@ -5,7 +5,10 @@ import Title from "antd/es/typography/Title";
 import { FunctionComponent, useEffect, useRef } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { pilePlansRemainingSelector } from "../../redux/selector";
+import {
+  pilePlansRemainingSelector,
+  projectsSelector,
+} from "../../redux/selector";
 import { IconChevronDown, IconChevronLeft } from "@tabler/icons-react";
 import { editPilePlantFilter } from "../../redux/pileplansSlice";
 
@@ -58,6 +61,9 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   const pilePlans = useAppSelector(pilePlansRemainingSelector).filter(
     (pilePlan) => pilePlan.projectId === params.projectId
   );
+  const projectFounded = useAppSelector(projectsSelector).data.find(
+    (project) => project.projectId === params.projectId
+  );
   const navigate = useNavigate();
   useEffect(() => {
     if (!pilePlans) {
@@ -90,6 +96,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         pile_raked: searchParams.get("pile_raked") ?? "",
       })
     );
+    document.title = projectFounded?.project_name ?? "";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -105,6 +112,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         paddingBottom: "48px",
       }}
     >
+      <Title level={1}>Quản Lý Piles</Title>
       <div
         style={{
           transition: "height",
@@ -133,7 +141,9 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
               height={20}
               className="mr-2"
             ></IconChevronDown>
-            Thông tin tìm kiếm
+            <span style={{ fontWeight: "600", fontSize: "16px" }}>
+              Thông tin tìm kiếm
+            </span>
           </Flex>
         </Title>
         <div className={`w-3/4 mx-auto mb-4`}>
