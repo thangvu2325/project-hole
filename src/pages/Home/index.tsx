@@ -6,7 +6,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { projectsRemainingSelector } from "../../redux/selector";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { editFilter } from "../../redux/projectsSlice";
-import { IconChevronDown } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconDeviceTabletExclamation,
+} from "@tabler/icons-react";
 
 interface HomeProps {}
 interface DataType {
@@ -76,6 +79,7 @@ const Home: FunctionComponent<HomeProps> = () => {
         project_date: searchParams.get("project_date") ?? "",
       })
     );
+    document.title = "Quản Lý Project";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
