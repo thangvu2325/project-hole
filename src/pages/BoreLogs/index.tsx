@@ -1,6 +1,6 @@
 import { Button, Col, Flex, Image, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { jsPDF } from "jspdf";
 
 interface BoreLogProps {}
