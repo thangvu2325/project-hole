@@ -2,32 +2,25 @@ import { Button, Col, Flex, Image, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { FunctionComponent } from "react";
 import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 interface BoreLogProps {}
 
 const BoreLog: FunctionComponent<BoreLogProps> = () => {
-  const generatePDF = () => {
-    const report = new jsPDF("portrait", "pt", "a4");
-    report
-      .html(document.querySelector("#pdf")!, {
-        printOptions: {
-          pageSize: "A4",
-          printBackground: true,
-          width: 1000,
-        },
-      })
-      .then(() => {
-        report.save("report.pdf");
-      });
+  const createPDF = async () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
+    const data = await html2canvas(document.querySelector("#pdf")!);
+    const img = data.toDataURL("image/png");
+    const imgProperties = pdf.getImageProperties(img);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
+    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("shipping_label.pdf");
   };
 
   return (
     <div style={{ background: "#fff" }}>
-      <Button
-        type="primary"
-        onClick={generatePDF}
-        style={{ margin: "8px 16px" }}
-      >
+      <Button type="primary" onClick={createPDF} style={{ margin: "8px 16px" }}>
         Export
       </Button>
       <div style={{ padding: "24px" }} id="pdf">
