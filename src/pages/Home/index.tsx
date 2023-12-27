@@ -6,10 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { projectsRemainingSelector } from "../../redux/selector";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { editFilter } from "../../redux/projectsSlice";
-import {
-  IconChevronDown,
-  IconDeviceTabletExclamation,
-} from "@tabler/icons-react";
+import { IconChevronDown } from "@tabler/icons-react";
 
 interface HomeProps {}
 interface DataType {
