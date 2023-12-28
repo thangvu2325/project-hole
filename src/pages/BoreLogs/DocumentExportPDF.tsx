@@ -31,7 +31,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <Flex style={{ marginBottom: "-18px" }} align="end">
             <Title
               style={{
-                border: "1px solid #ccc",
+                border: "2px solid #e5e7eb",
                 padding: "4px 6px",
               }}
               level={3}
@@ -39,7 +39,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               Log No.
             </Title>
             <Title
-              style={{ border: "1px solid #ccc", padding: "4px 6px" }}
+              style={{ border: "2px solid #e5e7eb", padding: "4px 6px" }}
               level={3}
             >
               17
@@ -319,7 +319,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           </div>
 
           <div className="col-span-5 grid grid-cols-5 border-[2px] border-solid border-[#e5e7eb]">
-            <div className="col-span-1 border-[2px] border-solid border-[#e5e7eb]"></div>
+            <div className="col-span-1 border-[2px] border-solid border-l-0 border-[#e5e7eb]"></div>
             <div className="col-span-4 border-[2px] border-solid border-[#e5e7eb]">
               {this.props.data.length
                 ? this.props.data.map((item, index, array) => {
