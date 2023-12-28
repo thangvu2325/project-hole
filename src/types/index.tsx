@@ -7,14 +7,14 @@ export type RouteType = {
 export type ProjectType = {
   projectId: string;
   project_name: string;
-  project_status: string;
+  project_status: "Done" | "Process";
   project_date: string;
 };
 export type PilePlanType = {
   projectId: string;
   pileId: string;
   pile_location: string;
-  pile_status: string;
+  pile_status: "Completed" | "Not started";
   pile_diameter: string;
-  pile_raked: string;
+  pile_raked: "Vertical" | "Horizon";
 };

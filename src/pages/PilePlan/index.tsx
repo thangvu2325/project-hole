@@ -1,8 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Col, Flex, Form, Input, Row, Space, Table } from "antd";
+import {
+  Button,
+  Col,
+  Flex,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Table,
+  notification,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import Title from "antd/es/typography/Title";
-import { FunctionComponent, useEffect, useRef } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   useLocation,
   useNavigate,
@@ -14,8 +31,13 @@ import {
   pilePlansRemainingSelector,
   projectsSelector,
 } from "../../redux/selector";
-import { IconChevronDown, IconChevronLeft } from "@tabler/icons-react";
-import { editPilePlantFilter } from "../../redux/pileplansSlice";
+import {
+  IconChevronDown,
+  IconChevronLeft,
+  IconPlus,
+} from "@tabler/icons-react";
+import { addPilePlant, editPilePlantFilter } from "../../redux/pileplansSlice";
+import ModalAdd from "../../components/ModalAdd";
 
 interface PilePlanPageProps {}
 interface DataType {
@@ -51,6 +73,14 @@ const columns: ColumnsType<DataType> | null = [
   {
     title: "Status",
     dataIndex: "pile_status",
+    filters: [
+      { text: "Completed", value: "Completed" },
+      { text: "Not started", value: "Not started" },
+    ],
+    onFilter: (value: string | boolean | React.Key, record) =>
+      typeof value === "string"
+        ? record.pile_status.indexOf(value) === 0
+        : true,
   },
   {
     title: "Diameter",
@@ -69,7 +99,6 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  console.log(location);
   const pilePlans = useAppSelector(pilePlansRemainingSelector)
     .filter((pilePlan) => pilePlan.projectId === params.projectId)
     .map((pile) => {
@@ -81,7 +110,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
             className="cursor-pointer"
             style={{ fontWeight: "400" }}
             onClick={() => {
-              navigate(location.pathname + "/BoreLog");
+              navigate(location.pathname + "/" + pile.pileId);
             }}
           >
             Detail
@@ -89,6 +118,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         ),
       };
     });
+  const [open, setOpen] = useState<boolean>(false);
   const projectFounded = useAppSelector(projectsSelector).data.find(
     (project) => project.projectId === params.projectId
   );
@@ -100,18 +130,40 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const refDiv = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
+  const [api, contextHolder] = notification.useNotification();
   const handleToggleShowSearchBox = () => {
     if (refDiv.current) {
       refDiv.current.classList.toggle("h-60");
     }
   };
-  const onFinish = async (values: FieldType) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onFinish = useCallback(async (values: any) => {
+    console.log(values);
+    try {
+      dispatch(
+        addPilePlant({ ...values, projectId: projectFounded?.projectId })
+      );
+      api["success"]({
+        message: "Thêm Pile Thành Công!",
+      });
+    } catch (error) {
+      api["error"]({
+        message: "Thêm Pile Thất Bại",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onFinishFailed = useCallback((errorInfo: unknown) => {
+    console.log("Failed:", errorInfo);
+  }, []);
+
+  const onFinishSearch = (values: FieldType) => {
     setSearchParams(values);
     console.log(values);
     dispatch(editPilePlantFilter(values));
   };
-
-  const onFinishFailed = (errorInfo: unknown) => {
+  const onFinishSearchFailed = (errorInfo: unknown) => {
     console.log("Failed:", errorInfo);
   };
   useEffect(() => {
@@ -130,17 +182,40 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
     <div
       style={{
         overflow: "auto",
-        width: "100%",
+        width: "1000px",
+        marginTop: "50px",
         background: "#fff",
         padding: "24px 36px",
         boxShadow:
           "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
         borderRadius: "6px",
         paddingBottom: "48px",
-        paddingTop: "80px",
       }}
     >
-      <Title level={1}>Quản Lý Piles</Title>
+      {contextHolder}
+      <Flex justify="space-between">
+        <Title level={1}>Quản Lý Piles</Title>
+        <Button
+          style={{ background: "#6366f1", color: "#fff" }}
+          className="flex items-center"
+          onClick={() => {
+            setOpen(!open);
+          }}
+        >
+          <Title
+            level={3}
+            style={{
+              fontWeight: "600",
+              color: "#fff",
+              marginBottom: "0",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconPlus width={18} height={18} className="mr-2"></IconPlus> New
+          </Title>
+        </Button>
+      </Flex>
       <div
         style={{
           transition: "height",
@@ -183,8 +258,8 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
               pile_raked: searchParams.get("pile_raked") ?? "",
             }}
             name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            onFinish={onFinishSearch}
+            onFinishFailed={onFinishSearchFailed}
             autoComplete="off"
           >
             <Row gutter={16}>
@@ -360,6 +435,132 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
           </Flex>
         </Button>
       </Flex>
+      <ModalAdd
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        setOpen={setOpen}
+        open={open}
+        title="Thêm Pile"
+      >
+        <Space direction="vertical">
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Location
+              </Title>
+            }
+            style={{ marginBottom: "6px" }}
+            name="pile_location"
+            rules={[
+              {
+                required: true,
+                message: "please input location!",
+              },
+            ]}
+          >
+            <Input
+              placeholder="Input Pile Location"
+              style={{ width: "190px" }}
+            ></Input>
+          </Form.Item>
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Status
+              </Title>
+            }
+            style={{ marginBottom: "6px" }}
+            name="pile_status"
+            rules={[
+              {
+                required: true,
+                message: "please select a status!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select a status"
+              allowClear
+              style={{ width: "190px" }}
+            >
+              <Select.Option value="Completed">Completed</Select.Option>
+              <Select.Option value="Not started">Not started</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Raked
+              </Title>
+            }
+            style={{ marginBottom: "6px" }}
+            name="pile_raked"
+            rules={[
+              {
+                required: true,
+                message: "please select pile raked!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="select a pile raked"
+              allowClear
+              style={{ width: "190px" }}
+            >
+              <Select.Option value="Vertical">Vertical</Select.Option>
+              <Select.Option value="Horizon">Horizon</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Diameter
+              </Title>
+            }
+            rules={[
+              {
+                required: true,
+                message: "please input diamerter!",
+              },
+            ]}
+            name="pile_diameter"
+            style={{ marginBottom: "0" }}
+          >
+            <Input
+              style={{ width: "190px" }}
+              placeholder="input diamerter"
+            ></Input>
+          </Form.Item>
+        </Space>
+      </ModalAdd>
     </div>
   );
 };

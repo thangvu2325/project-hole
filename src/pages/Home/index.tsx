@@ -1,17 +1,36 @@
-import { Button, Col, Flex, Form, Input, Row, Space, Table } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Table,
+  notification,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import Title from "antd/es/typography/Title";
-import { FunctionComponent, useEffect, useRef } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { projectsRemainingSelector } from "../../redux/selector";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { editFilter } from "../../redux/projectsSlice";
-import { IconChevronDown } from "@tabler/icons-react";
+import { addProject, editFilter } from "../../redux/projectsSlice";
+import { IconChevronDown, IconPlus } from "@tabler/icons-react";
+import ModalAdd from "../../components/ModalAdd";
 
 interface HomeProps {}
 interface DataType {
-  key: string;
-  projectId: string;
+  key?: string;
+  projectId?: string;
   project_name: string;
   project_status: string;
   project_date: string;
@@ -30,7 +49,16 @@ const columns: ColumnsType<DataType> | null = [
   {
     title: "Status",
     dataIndex: "project_status",
+    filters: [
+      { text: "Process", value: "Process" },
+      { text: "Done", value: "Done" },
+    ],
+    onFilter: (value: string | boolean | React.Key, record) =>
+      typeof value === "string"
+        ? record.project_status.indexOf(value) === 0
+        : true,
   },
+
   {
     title: "Date",
     dataIndex: "project_date",
@@ -50,7 +78,9 @@ const Home: FunctionComponent<HomeProps> = () => {
       };
     }
   );
+  const [open, setOpen] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [api, contextHolder] = notification.useNotification();
   const refDiv = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -59,13 +89,37 @@ const Home: FunctionComponent<HomeProps> = () => {
       refDiv.current.classList.toggle("h-42");
     }
   };
-  const onFinish = async (values: FieldType) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onFinish = useCallback(async (values: any) => {
+    console.log(values);
+    try {
+      dispatch(
+        addProject({
+          ...values,
+          project_date: values.project_date.format("DD-MM-YYYY").toString(),
+        })
+      );
+      api["success"]({
+        message: "Thêm Project Thành Công!",
+      });
+    } catch (error) {
+      api["error"]({
+        message: "Thêm Project Thất Bại",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onFinishFailed = useCallback((errorInfo: unknown) => {
+    console.log("Failed:", errorInfo);
+  }, []);
+
+  const onFinishSearch = (values: FieldType) => {
     setSearchParams(values);
     console.log(values);
     dispatch(editFilter(values));
   };
-
-  const onFinishFailed = (errorInfo: unknown) => {
+  const onFinishSearchFailed = (errorInfo: unknown) => {
     console.log("Failed:", errorInfo);
   };
   useEffect(() => {
@@ -83,7 +137,8 @@ const Home: FunctionComponent<HomeProps> = () => {
     <div
       style={{
         overflow: "auto",
-        width: "100%",
+        width: "1000px",
+        marginTop: "50px",
         background: "#fff",
         padding: "24px 36px",
         boxShadow:
@@ -92,7 +147,30 @@ const Home: FunctionComponent<HomeProps> = () => {
         paddingBottom: "36px",
       }}
     >
-      <Title level={1}>Quản Lý Project</Title>
+      {contextHolder}
+      <Flex justify="space-between">
+        <Title level={1}>Quản Lý Projects</Title>
+        <Button
+          style={{ background: "#6366f1", color: "#fff" }}
+          className="flex items-center"
+          onClick={() => {
+            setOpen(!open);
+          }}
+        >
+          <Title
+            level={3}
+            style={{
+              fontWeight: "600",
+              color: "#fff",
+              marginBottom: "0",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconPlus width={18} height={18} className="mr-2"></IconPlus> New
+          </Title>
+        </Button>
+      </Flex>
       <div
         style={{
           transition: "height",
@@ -134,8 +212,8 @@ const Home: FunctionComponent<HomeProps> = () => {
               project_date: searchParams.get("project_date") ?? "",
             }}
             name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            onFinish={onFinishSearch}
+            onFinishFailed={onFinishSearchFailed}
             autoComplete="off"
           >
             <Row gutter={16}>
@@ -258,6 +336,98 @@ const Home: FunctionComponent<HomeProps> = () => {
           pagination={{ pageSize: 5 }}
         />
       </div>
+      <ModalAdd
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        setOpen={setOpen}
+        open={open}
+        title="Thêm Project"
+      >
+        <Space direction="vertical">
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Project Name
+              </Title>
+            }
+            style={{ marginBottom: "6px" }}
+            name="project_name"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập tên Project!",
+              },
+            ]}
+          >
+            <Input
+              placeholder="Nhập Project Name"
+              style={{ width: "190px" }}
+            ></Input>
+          </Form.Item>
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Status
+              </Title>
+            }
+            style={{ marginBottom: "6px" }}
+            name="project_status"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn status!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select a status"
+              allowClear
+              style={{ width: "190px" }}
+            >
+              <Select.Option value="Process">Process</Select.Option>
+              <Select.Option value="Done">Done</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item<DataType>
+            label={
+              <Title
+                level={3}
+                style={{
+                  marginBottom: "0px",
+                  width: "90px",
+                  textAlign: "left",
+                }}
+              >
+                Date
+              </Title>
+            }
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng chọn ngày!",
+              },
+            ]}
+            name="project_date"
+            style={{ marginBottom: "0" }}
+          >
+            <DatePicker placeholder="Chọn ngày" style={{ width: "190px" }} />
+          </Form.Item>
+        </Space>
+      </ModalAdd>
     </div>
   );
 };

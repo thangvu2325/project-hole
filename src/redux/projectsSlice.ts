@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ProjectType } from "../types";
 // Define a type for the slice state
 export interface ProjectsState {
@@ -31,11 +31,12 @@ const initialState: ProjectsState = {
   filter: {
     projectId: "",
     project_name: "",
-    project_status: "",
+    project_status: "Process",
   },
   error: "",
   loading: "idle",
 };
+let id = 3;
 export const projectsSlice = createSlice({
   name: "projects",
   // `createSlice` will infer the state type from the `initialState` argument
@@ -47,9 +48,13 @@ export const projectsSlice = createSlice({
         ...action.payload,
       };
     },
+    addProject(state, action: PayloadAction<ProjectType>) {
+      state.data.push({ ...action.payload, projectId: id.toString() });
+      id++;
+    },
   },
 });
 
-export const { editFilter } = projectsSlice.actions;
+export const { editFilter, addProject } = projectsSlice.actions;
 
 export default projectsSlice.reducer;

@@ -3,6 +3,8 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Column from "antd/es/table/Column";
 import { FunctionComponent } from "react";
 import { dataType } from ".";
+import { IconChevronLeft } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 const mockData: dataType[] = [{ depth: 0, description: "Top of Borehole" }];
 interface EditableTableFormProps {
@@ -12,6 +14,7 @@ interface EditableTableFormProps {
 const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
   handleChangeTable,
 }) => {
+  const navigate = useNavigate();
   const onFinish = (values: { data: dataType[] }) => {
     handleChangeTable(values.data.slice(1));
   };
@@ -33,9 +36,23 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                     <PlusOutlined className="mr-4" /> Add field
                   </Flex>
                 </Button>
-                <Button type="primary" htmlType="submit" className="mr-8 w-28">
-                  Submit
-                </Button>
+                <Flex className="mr-8">
+                  <Button
+                    className="bg-gray-600 mr-4 w-20 flex justify-center items-center"
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    <IconChevronLeft className="text-[#fff]"></IconChevronLeft>
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="bg-gray-600 mr-4 w-20 flex justify-center items-center"
+                  >
+                    Submit
+                  </Button>
+                </Flex>
               </Flex>
             )}
           >

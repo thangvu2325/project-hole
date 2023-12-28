@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PilePlanType } from "../types";
 // Define a type for the slice state
 export interface PilePlansState {
@@ -44,6 +44,13 @@ const initialState: PilePlansState = {
     pile_raked: "",
   },
 };
+// Math.random().toString(36).slice(-8)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const alphabetArray: Array<string> = [];
+for (let i = 97; i <= 122; i++) {
+  alphabetArray.push(String.fromCharCode(i).toUpperCase());
+}
+let index = 2;
 export const pileplansSlice = createSlice({
   name: "pileplans",
   // `createSlice` will infer the state type from the `initialState` argument
@@ -55,9 +62,17 @@ export const pileplansSlice = createSlice({
         ...action.payload,
       };
     },
+    // Math.random().toString(36).slice(-8)
+    addPilePlant(state, action: PayloadAction<PilePlanType>) {
+      state.data.push({
+        ...action.payload,
+        pileId: `MP${action.payload.projectId}${alphabetArray[index]}`,
+      });
+      index++;
+    },
   },
 });
 
-export const { editPilePlantFilter } = pileplansSlice.actions;
+export const { editPilePlantFilter, addPilePlant } = pileplansSlice.actions;
 
 export default pileplansSlice.reducer;
