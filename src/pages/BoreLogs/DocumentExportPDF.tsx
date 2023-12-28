@@ -1,7 +1,8 @@
-import { Col, Flex, Image, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { Component } from "react";
 import { dataType } from ".";
+import logo from "../../assets/image/Micropile Borelogs.png";
+import { Flex, Image } from "antd";
 type DocumentExportPDFProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: React.MutableRefObject<any>;
@@ -10,19 +11,14 @@ type DocumentExportPDFProps = {
 };
 export default class DocumentExportPDF extends Component<DocumentExportPDFProps> {
   render() {
-    console.log(this.props.data);
     return (
-      <div
-        style={{ padding: "24px" }}
-        id="pdf"
-        className={this.props.className ?? ""}
-      >
-        <Flex justify="space-between" align="end">
+      <div className="mx-[80px] mt-[30px] text-[16px]">
+        <Flex justify="space-between" align="end" className="mb-3">
           <Image
-            src="https://lh3.googleusercontent.com/YTlEF8ieGq-1pj1cVtPQ_27sLYinnXMNY0ju1A2YxIp1WuA3-rkYtSxm7KCfNFTll_xrkzrMP2ZhQhv99hh2L08Q1CcSr8QQBDU=s0"
             preview={false}
-            width={160}
+            src={logo}
             height={70}
+            className="ml-1"
           ></Image>
           <Flex vertical>
             <Title level={3} style={{ textAlign: "center" }}>
@@ -32,7 +28,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               MICROPILE BORELOG
             </Title>
           </Flex>
-          <Flex style={{ marginBottom: "-6px" }} align="end">
+          <Flex style={{ marginBottom: "-18px" }} align="end">
             <Title
               style={{
                 border: "1px solid #ccc",
@@ -50,99 +46,281 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
             </Title>
           </Flex>
         </Flex>
-        <div style={{ border: "1px solid #ccc" }}>
-          <Row align={"middle"}>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Project
-            </Col>
-            <Col
-              span={15}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Proposed Slope Remediation for Monoluxury Sdn Bhd Cameron
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Date
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              26/05/22
-            </Col>
-          </Row>
-          <Row>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Pile No.
-            </Col>
-            <Col
-              span={7}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            ></Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Pile Dia.
-            </Col>
-            <Col
-              span={5}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              200 mm
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Rake
-            </Col>
-            <Col
-              span={3}
-              style={{ padding: "6px 12px", border: "1px solid #ccc" }}
-            >
-              Vertical
-            </Col>
-          </Row>
-          <Row className="mt-[1px] w-full">
-            <Col
-              span={10}
-              className="px-[12px] py-[6px] border-[1px] border-solid border-[#ccc]"
-            ></Col>
+        <div className="grid grid-cols-10 ">
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Project</p>
+          <p className="col-span-7 border-2  pl-[4px] sm:p-[2px]">
+            Proposed Slope Remediation for Monoluxury Sdn Bhd Cameron
+          </p>
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Date</p>
+          <input
+            className="col-span-1 border-2  pl-[4px] sm:p-[2px]"
+            type="text"
+          ></input>
+        </div>
+        <div className="grid grid-cols-10 ">
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Pile No.</p>
+          <input
+            className="col-span-4 border-2  pl-[4px] sm:p-[2px]"
+            type="text"
+          ></input>
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Pile Dia</p>
+          <p className="col-span-2 border-2  pl-[4px] sm:p-[2px]">200mm</p>
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Rake</p>
+          <p className="col-span-1 border-2   pl-[4px] sm:p-[2px]">Vertical</p>
+        </div>
+        <div className="grid grid-cols-10 ">
+          <p className="col-span-3 border-2  pl-[4px] sm:p-[2px] ">
+            Boring Plant.
+          </p>
+          <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] ">
+            Hong Drill
+          </p>
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Depth (m)</p>
+          <p className="col-span-4 border-2  pl-[4px] sm:p-[2px] text-center">
+            Description
+          </p>
+        </div>
+        <div className="grid grid-cols-10 mt-[2px]">
+          <div className="col-span-5 grid grid-cols-5">
+            <div className="col-span-5  grid grid-cols-5">
+              <p className="col-span-1  border-2 pl-[4px] sm:p-[2px]">Boring</p>
+              <p className="col-span-2   border-2 pl-[4px] sm:p-[2px] text-center">
+                Date
+              </p>
+              <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center">
+                Time
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Start</p>
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">End</p>
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">
+                Grouting
+              </p>
+              <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center">
+                Date
+              </p>
+              <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center">
+                Time
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Start</p>
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">End</p>
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Platform Level (RL)
+              </p>
 
-            <Col
-              span={3}
-              className="px-[12px] py-[6px] border-[1px] border-solid border-[#ccc]"
-            >
-              Depth (m)
-            </Col>
-            <Col
-              span={11}
-              className="px-[12px] py-[6px] border-[1px] border-solid border-[#ccc] text-center"
-            >
-              Description
-            </Col>
-          </Row>
-          <Row className="mt-[1px]">
-            <Col
-              span={10}
-              className="px-[12px] py-[6px] border-[1px] border-solid border-[#ccc] h-[800px]"
-            ></Col>
-            <Col
-              span={3}
-              className="px-[12px] py-[6px] border-[1px] border-solid border-[#ccc]"
-            ></Col>
+              <input
+                type="text"
+                className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Top Of Casing (RL)
+              </p>
 
-            <Col span={11} className=" border-[1px] border-solid border-[#ccc]">
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Cut-off Level (RL)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Bored Depth (m) fr. TOC
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                TOE Level (RL)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2   text-center pl-[4px] sm:p-[2px]">
+                Bored Depth (m) fr. OGL
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Pile Length (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Soil Drilling (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Total weathered Rock, Boulders, Cavity (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Rock Socket Length (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Grout Length (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Nos. of bag
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2   text-center pl-[4px] sm:p-[2px]">
+                API Pipe Size (mm)
+              </p>
+
+              <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center">
+                88.9dia, 6.4thk
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                API Pipe Length (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
+                Permanent Casing (m)
+              </p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]"></p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-3 border-2   text-center pl-[4px] sm:p-[2px]"></p>
+
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+              />
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px]">
+                Remarks
+              </p>
+            </div>
+          </div>
+
+          <div className="col-span-5 grid grid-cols-5 border-[2px] border-solid border-[#e5e7eb]">
+            <div className="col-span-1 border-[2px] border-solid border-[#e5e7eb]"></div>
+            <div className="col-span-4 border-[2px] border-solid border-[#e5e7eb]">
               {this.props.data.length
                 ? this.props.data.map((item, index, array) => {
                     const deepest = array[array.length - 1].depth;
@@ -190,7 +368,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
                             isLastItem ? "h-0" : "h-[2px]"
                           } bg-[#ccc]`}
                         >
-                          <div className="absolute top-[-10px] right-2 text-[10px] text-nowrap ">
+                          <div className="absolute top-[-16px] right-2 text-[16px] text-nowrap ">
                             {item.depth} m
                           </div>
                         </div>
@@ -198,8 +376,8 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
                     );
                   })
                 : ""}
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       </div>
     );

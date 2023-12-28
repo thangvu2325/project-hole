@@ -11,12 +11,6 @@ export type dataType = {
   depth: number;
   description: string;
 };
-// const data: dataType[] = [
-//   { depth: 1, description: "Soil" },
-//   { depth: 4, description: "Sand" },
-//   { depth: 8, description: "sss" },
-//   { depth: 15, description: "sss" },
-// ];
 const BoreLog: FunctionComponent<BoreLogProps> = () => {
   const [data, setData] = useState<dataType[]>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +34,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
     }
   };
   return (
-    <div className="w-[1000px] bg-[#fff]">
+    <div className="mx-[80px] mt-[30px] bg-[#fff]">
       <ReactToPrint
         trigger={() => (
           <Button
