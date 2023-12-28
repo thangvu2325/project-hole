@@ -1,10 +1,19 @@
 import { Button, ConfigProvider, Flex, Image, Menu } from "antd";
 import { Fragment, FunctionComponent, useRef } from "react";
 import Title from "antd/es/typography/Title";
-import { IconHome2, IconSettings, IconUserCircle } from "@tabler/icons-react";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconHome2,
+  IconSettings,
+  IconUserCircle,
+} from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
 import type { MenuProps } from "antd";
 import logo from "../../assets/image/Micropile Borelogs.png";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { toggleStatusSider } from "../../redux/settingsSlice";
+import { settingsSelector } from "../../redux/selector";
 
 type MenuItem = Required<MenuProps>["items"][number];
 interface SiderProps {}
@@ -27,11 +36,14 @@ function getItem(
 const Sider: FunctionComponent<SiderProps> = () => {
   const { pathname } = useLocation();
   const refDiv = useRef<HTMLDivElement>(null);
-
+  const dispatch = useAppDispatch();
+  const siderStatus = useAppSelector(settingsSelector)?.siderState;
   const items: MenuItem[] = [
     getItem("Quản Lý Projects", "sub3", <Fragment></Fragment>, [
       getItem(
-        <Link to={"/projects"}>Danh Sách Projects</Link>,
+        <Link to={"/projects"} className="whitespace-nowrap">
+          Danh Sách Projects
+        </Link>,
         "/projects",
         <Fragment></Fragment>
       ),
@@ -41,8 +53,30 @@ const Sider: FunctionComponent<SiderProps> = () => {
   return (
     <div
       ref={refDiv}
-      className={`overflow-hidden overflow-y-scroll min-w-[280px]  max-w-[280px] h-[100vh]  scrollCustom bg-[#001529] relative`}
+      className={`overflow-visible fixed left-0 top-0 bottom-0 w-[280px]  z-30  bg-[#001529] ${
+        siderStatus === "idle"
+          ? ""
+          : siderStatus
+          ? "animate-sidebarShow"
+          : "animate-sidebarHidden -translate-x-full"
+      }`}
     >
+      <div
+        className={`absolute top-[50%] translate-y-[-50%] ${
+          siderStatus ? "right-[-16px]" : "right-[-20px]"
+        }   bg-[#6366f1] w-10 h-10 rounded-[56px] z-40 flex items-center  ${
+          siderStatus ? "justify-center" : "justify-end"
+        } text-[#fff] cursor-pointer`}
+        onClick={(): void => {
+          dispatch(toggleStatusSider());
+        }}
+      >
+        {siderStatus ? (
+          <IconChevronLeft width={30} height={30}></IconChevronLeft>
+        ) : (
+          <IconChevronRight width={30} height={30}></IconChevronRight>
+        )}
+      </div>
       <ConfigProvider
         theme={{
           components: {
@@ -82,6 +116,7 @@ const Sider: FunctionComponent<SiderProps> = () => {
                     color: "#9da4ae",
                     marginTop: "0",
                     marginBottom: "0",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   Home
@@ -101,6 +136,7 @@ const Sider: FunctionComponent<SiderProps> = () => {
                     color: "#9da4ae",
                     marginTop: "0",
                     marginBottom: "0",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   Setting
@@ -119,6 +155,7 @@ const Sider: FunctionComponent<SiderProps> = () => {
                     color: "#9da4ae",
                     marginTop: "0",
                     marginBottom: "0",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   Profile
@@ -139,18 +176,20 @@ const Sider: FunctionComponent<SiderProps> = () => {
             >
               Concepts
             </Title>
-            <Menu
-              inlineIndent={16}
-              defaultSelectedKeys={[pathname]}
-              defaultOpenKeys={[pathname]}
-              mode="inline"
-              style={{ backgroundColor: "transparent", color: "#9da4ae" }}
-              items={items}
-            />
+            <div className="scrollCustom">
+              <Menu
+                inlineIndent={16}
+                defaultSelectedKeys={[pathname]}
+                defaultOpenKeys={[pathname]}
+                mode="inline"
+                style={{ backgroundColor: "transparent", color: "#9da4ae" }}
+                items={items}
+              />
+            </div>
           </div>
         </div>
       </ConfigProvider>
-      <div className="fixed bottom-0 w-[280px] h-24 border-t-[0.8px] border-solid border-[#ccc] rounded-md">
+      <div className="absolute w-full bottom-0  h-24 border-t-[0.8px] border-solid border-[#ccc] rounded-md">
         <Button
           className="absolute left-[50%] bottom-5 translate-x-[-50%] px-[16px] py-[8pxs] w-48 h-10"
           type="primary"

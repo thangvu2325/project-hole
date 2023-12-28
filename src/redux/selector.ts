@@ -2,9 +2,12 @@ import { createSelector } from "@reduxjs/toolkit";
 import { PilePlansState } from "./pileplansSlice";
 import { ProjectsState } from "./projectsSlice";
 import { RootState } from "./store";
+import { SettingsState } from "./settingsSlice";
 
 export const projectsSelector = (state: RootState): ProjectsState =>
   state.projects;
+export const settingsSelector = (state: RootState): SettingsState =>
+  state.settings;
 export const projectsRemainingSelector = createSelector(
   projectsSelector,
   (projectData) => {

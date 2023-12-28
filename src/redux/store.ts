@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import projectsSlice from "./projectsSlice";
 import pileplansSlice from "./pileplansSlice";
+import settingsSlice from "./settingsSlice";
 
 export const store = configureStore({
   reducer: {
     projects: projectsSlice,
     pileplans: pileplansSlice,
+    settings: settingsSlice,
   },
 });
 
