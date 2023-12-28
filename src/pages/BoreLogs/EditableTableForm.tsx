@@ -41,16 +41,22 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
           >
             <Column
               dataIndex="depth"
-              title="Depth"
+              title="Depth (m)"
               render={(_value, _record, index) => (
                 <Form.Item
                   name={[index, "depth"]}
                   style={{ marginBottom: "0" }}
+                  initialValue={index === 0 ? mockData[0].depth : undefined}
                 >
-                  <Input placeholder="depth" style={{ width: "60px" }} />
+                  <Input
+                    placeholder="depth"
+                    style={{ width: "60px" }}
+                    disabled={index === 0}
+                  />
                 </Form.Item>
               )}
             />
+
             <Column
               dataIndex="description"
               title="Description"
@@ -58,23 +64,34 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                 <Form.Item
                   name={[index, "description"]}
                   style={{ marginBottom: "0" }}
+                  initialValue={
+                    index === 0 ? mockData[0].description : undefined
+                  }
                 >
-                  <Input placeholder="description" style={{ width: "150px" }} />
+                  <Input
+                    placeholder="description"
+                    style={{ width: "150px" }}
+                    disabled={index === 0}
+                  />
                 </Form.Item>
               )}
             />
             <Column
               title="Action"
               className="flex items-center"
-              render={(_value, _record, index) => (
-                <Button
-                  icon={<MinusOutlined />}
-                  shape="circle"
-                  onClick={() => {
-                    remove(index);
-                  }}
-                />
-              )}
+              render={(_value, _record, index) =>
+                index === 0 ? (
+                  <Button icon={<MinusOutlined />} shape="circle" disabled />
+                ) : (
+                  <Button
+                    icon={<MinusOutlined />}
+                    shape="circle"
+                    onClick={() => {
+                      remove(index);
+                    }}
+                  />
+                )
+              }
             />
           </Table>
         )}

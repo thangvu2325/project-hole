@@ -34,7 +34,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
     }
   };
   return (
-    <div className="mx-[80px] mt-[30px] bg-[#fff]">
+    <div className="w-[1000px] bg-[#fff] shadow-lg">
       <ReactToPrint
         trigger={() => (
           <Button
