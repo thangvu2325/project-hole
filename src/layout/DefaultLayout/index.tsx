@@ -8,10 +8,9 @@ interface DefaultLayoutProps {
 
 const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
   return (
-    <Layout style={{ height: "1000px", background: "transparent" }}>
+    <Layout style={{ background: "transparent" }}>
       <Content
         style={{
-          width: "1000px",
           margin: "0 auto",
         }}
       >

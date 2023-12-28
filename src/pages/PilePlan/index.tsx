@@ -3,7 +3,12 @@ import { Button, Col, Flex, Form, Input, Row, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Title from "antd/es/typography/Title";
 import { FunctionComponent, useEffect, useRef } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import {
   pilePlansRemainingSelector,
@@ -55,16 +60,38 @@ const columns: ColumnsType<DataType> | null = [
     title: "Raked",
     dataIndex: "pile_raked",
   },
+  {
+    title: "BoreLog",
+    dataIndex: "detail",
+  },
 ];
 const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
+  const navigate = useNavigate();
   const params = useParams();
-  const pilePlans = useAppSelector(pilePlansRemainingSelector).filter(
-    (pilePlan) => pilePlan.projectId === params.projectId
-  );
+  const location = useLocation();
+  console.log(location);
+  const pilePlans = useAppSelector(pilePlansRemainingSelector)
+    .filter((pilePlan) => pilePlan.projectId === params.projectId)
+    .map((pile) => {
+      return {
+        ...pile,
+        detail: (
+          <Title
+            level={3}
+            className="cursor-pointer"
+            style={{ fontWeight: "400" }}
+            onClick={() => {
+              navigate(location.pathname + "/BoreLog");
+            }}
+          >
+            Detail
+          </Title>
+        ),
+      };
+    });
   const projectFounded = useAppSelector(projectsSelector).data.find(
     (project) => project.projectId === params.projectId
   );
-  const navigate = useNavigate();
   useEffect(() => {
     if (!pilePlans) {
       navigate("/");
@@ -110,13 +137,14 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
           "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
         borderRadius: "6px",
         paddingBottom: "48px",
+        paddingTop: "80px",
       }}
     >
       <Title level={1}>Quản Lý Piles</Title>
       <div
         style={{
           transition: "height",
-          transitionDuration: "500ms",
+          transitionDuration: "1000ms",
           transitionTimingFunction: "ease-in-out",
           height: "40px",
           overflow: "hidden",

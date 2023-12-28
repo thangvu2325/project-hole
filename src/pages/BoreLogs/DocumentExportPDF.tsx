@@ -6,12 +6,17 @@ type DocumentExportPDFProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: React.MutableRefObject<any>;
   data: dataType[];
+  className?: string;
 };
 export default class DocumentExportPDF extends Component<DocumentExportPDFProps> {
   render() {
     console.log(this.props.data);
     return (
-      <div style={{ padding: "24px" }} id="pdf">
+      <div
+        style={{ padding: "24px" }}
+        id="pdf"
+        className={this.props.className ?? ""}
+      >
         <Flex justify="space-between" align="end">
           <Image
             src="https://lh3.googleusercontent.com/YTlEF8ieGq-1pj1cVtPQ_27sLYinnXMNY0ju1A2YxIp1WuA3-rkYtSxm7KCfNFTll_xrkzrMP2ZhQhv99hh2L08Q1CcSr8QQBDU=s0"
