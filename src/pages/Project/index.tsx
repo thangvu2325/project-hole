@@ -1,7 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Button,
   Col,
+  DatePicker,
   Flex,
   Form,
   Input,
@@ -20,120 +20,91 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import {
-  pilePlansRemainingSelector,
-  projectsSelector,
-} from "../../redux/selector";
-import {
-  IconChevronDown,
-  IconChevronLeft,
-  IconPlus,
-} from "@tabler/icons-react";
-import { addPilePlant, editPilePlantFilter } from "../../redux/pileplansSlice";
+import { projectsRemainingSelector } from "../../redux/selector";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { addProject, editFilter } from "../../redux/projectsSlice";
+import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import ModalAdd from "../../components/ModalAdd";
 
-interface PilePlanPageProps {}
+interface ProjectPageProps {}
 interface DataType {
-  key: string;
-  projectId: string;
-  pileId: string;
-  pile_location: string;
-  pile_status: string;
-  pile_diameter: string;
-  pile_raked: string;
+  key?: string;
+  projectId?: string;
+  project_name: string;
+  project_status: string;
+  project_date: string;
 }
-type FieldType = {
-  pileId: string;
-  pile_location: string;
-  pile_status: string;
-  pile_diameter: string;
-  pile_raked: string;
-};
+
 const columns: ColumnsType<DataType> | null = [
   {
-    title: "Project No.",
-    dataIndex: "projectId",
+    title: "No.",
+    dataIndex: "key",
     sortDirections: ["descend"],
   },
   {
-    title: "Pile No.",
-    dataIndex: "pileId",
-  },
-  {
-    title: "Pile Location",
-    dataIndex: "pile_location",
+    title: "Project Name",
+    dataIndex: "project_name",
   },
   {
     title: "Status",
-    dataIndex: "pile_status",
+    dataIndex: "project_status",
     filters: [
-      { text: "Completed", value: "Completed" },
-      { text: "Not started", value: "Not started" },
+      { text: "Process", value: "Process" },
+      { text: "Done", value: "Done" },
     ],
     onFilter: (value: string | boolean | React.Key, record) =>
       typeof value === "string"
-        ? record.pile_status.indexOf(value) === 0
+        ? record.project_status.indexOf(value) === 0
         : true,
   },
+
   {
-    title: "Diameter",
-    dataIndex: "pile_diameter",
+    title: "Date",
+    dataIndex: "project_date",
   },
   {
-    title: "Raked",
-    dataIndex: "pile_raked",
-  },
-  {
-    title: "BoreLog",
+    title: "Pile Plan",
     dataIndex: "detail",
   },
 ];
-const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
-  const navigate = useNavigate();
-  const params = useParams();
-  const location = useLocation();
-  const pilePlans = useAppSelector(pilePlansRemainingSelector)
-    .filter((pilePlan) => pilePlan.projectId === params.projectId)
-    .map((pile) => {
+type FieldType = {
+  projectId?: string;
+  project_name?: string;
+  project_status?: string;
+};
+const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
+  const tableData = useAppSelector(projectsRemainingSelector)?.map(
+    (project, index) => {
       return {
-        ...pile,
+        ...project,
+        key: (index + 1).toString(),
         detail: (
           <Title
             level={3}
             className="cursor-pointer"
             style={{ fontWeight: "400" }}
             onClick={() => {
-              navigate(location.pathname + "/" + pile.pileId);
+              navigate(
+                location.pathname + "/" + project.projectId + "/pileplan"
+              );
             }}
           >
             Detail
           </Title>
         ),
       };
-    });
-  const [open, setOpen] = useState<boolean>(false);
-  const projectFounded = useAppSelector(projectsSelector).data.find(
-    (project) => project.projectId === params.projectId
-  );
-  useEffect(() => {
-    if (!pilePlans) {
-      navigate("/");
     }
-  }, [pilePlans]);
+  );
+  const [open, setOpen] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [api, contextHolder] = notification.useNotification();
   const refDiv = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
   const handleToggleShowSearchBox = () => {
     if (refDiv.current) {
-      refDiv.current.classList.toggle("h-60");
+      refDiv.current.classList.toggle("h-42");
     }
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -141,14 +112,17 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
     console.log(values);
     try {
       dispatch(
-        addPilePlant({ ...values, projectId: projectFounded?.projectId })
+        addProject({
+          ...values,
+          project_date: values.project_date.format("DD-MM-YYYY").toString(),
+        })
       );
       api["success"]({
-        message: "Thêm Pile Thành Công!",
+        message: "Thêm Project Thành Công!",
       });
     } catch (error) {
       api["error"]({
-        message: "Thêm Pile Thất Bại",
+        message: "Thêm Project Thất Bại",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,21 +135,20 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   const onFinishSearch = (values: FieldType) => {
     setSearchParams(values);
     console.log(values);
-    dispatch(editPilePlantFilter(values));
+    dispatch(editFilter(values));
   };
   const onFinishSearchFailed = (errorInfo: unknown) => {
     console.log("Failed:", errorInfo);
   };
   useEffect(() => {
     dispatch(
-      editPilePlantFilter({
-        pileId: searchParams.get("pileId") ?? "",
-        pile_location: searchParams.get("pile_location") ?? "",
-        pile_diameter: searchParams.get("pile_diameter") ?? "",
-        pile_raked: searchParams.get("pile_raked") ?? "",
+      editFilter({
+        projectId: searchParams.get("projectId") ?? "",
+        project_status: searchParams.get("project_status") ?? "",
+        project_date: searchParams.get("project_date") ?? "",
       })
     );
-    document.title = projectFounded?.project_name ?? "";
+    document.title = "Quản Lý Project";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -188,10 +161,10 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
       }}
     >
       {contextHolder}
-      <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md pb-3">
+      <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md">
         <Flex justify="space-between">
           <Title level={1} className="ml-4 mt-4">
-            Quản Lý Piles
+            Quản Lý Projects
           </Title>
           <Button
             style={{ background: "#6366f1", color: "#fff" }}
@@ -217,11 +190,10 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         <div
           style={{
             transition: "height",
-            transitionDuration: "1000ms",
+            transitionDuration: "500ms",
             transitionTimingFunction: "ease-in-out",
             height: "40px",
             overflow: "hidden",
-            marginTop: "16px",
           }}
           ref={refDiv}
         >
@@ -251,10 +223,9 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
           <div className={`w-3/4 mx-auto mb-4`}>
             <Form
               initialValues={{
-                pileId: searchParams.get("pileId") ?? "",
-                pile_location: searchParams.get("pile_location") ?? "",
-                pile_diameter: searchParams.get("pile_diameter") ?? "",
-                pile_raked: searchParams.get("pile_raked") ?? "",
+                projectId: searchParams.get("projectId") ?? "",
+                project_status: searchParams.get("project_status") ?? "",
+                project_date: searchParams.get("project_date") ?? "",
               }}
               name="basic"
               onFinish={onFinishSearch}
@@ -273,12 +244,12 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                             margin: "0",
                           }}
                         >
-                          Pile Id
+                          ProjectId
                         </Title>
                       }
-                      name="pileId"
+                      name="projectId"
                     >
-                      <Input placeholder="Nhập PileId"></Input>
+                      <Input placeholder="Nhập ProjectId"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -293,54 +264,12 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                             margin: "0",
                           }}
                         >
-                          Pile Location
+                          Project Name
                         </Title>
                       }
-                      name="pile_location"
+                      name="project_name"
                     >
-                      <Input placeholder="Nhập Pile Location"></Input>
-                    </Form.Item>
-                  </Space>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Space>
-                    <Form.Item<FieldType>
-                      label={
-                        <Title
-                          level={3}
-                          style={{
-                            width: "112px",
-                            margin: "0",
-                          }}
-                        >
-                          Pile Diameter
-                        </Title>
-                      }
-                      name="pile_diameter"
-                    >
-                      <Input placeholder="Nhập Pile Diameter"></Input>
-                    </Form.Item>
-                  </Space>
-                </Col>
-                <Col span={12}>
-                  <Space>
-                    <Form.Item<FieldType>
-                      label={
-                        <Title
-                          level={3}
-                          style={{
-                            width: "112px",
-                            margin: "0",
-                          }}
-                        >
-                          Pike Raked
-                        </Title>
-                      }
-                      name="pile_raked"
-                    >
-                      <Input placeholder="Nhập Pike Raked"></Input>
+                      <Input placeholder="Nhập Project Name"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -405,44 +334,24 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         <div
           style={{
             background: "#fff",
+            boxShadow:
+              "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
             borderRadius: "6px",
           }}
         >
           <Table
             columns={columns}
-            dataSource={pilePlans.map((pilePlan) => {
-              return {
-                ...pilePlan,
-                key: pilePlan.pileId,
-              };
-            })}
-            pagination={{ pageSize: 4 }}
+            dataSource={tableData}
+            pagination={{ pageSize: 10 }}
           />
-          <Flex
-            justify="end"
-            style={{ marginTop: "12px", marginRight: "12px" }}
-          >
-            <Button
-              style={{ width: "80px", height: "40px" }}
-              type="primary"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <Flex align="center" justify="center">
-                <IconChevronLeft width={20} height={20}></IconChevronLeft>
-              </Flex>
-            </Button>
-          </Flex>
         </div>
       </div>
-
       <ModalAdd
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         setOpen={setOpen}
         open={open}
-        title="Thêm Pile"
+        title="Thêm Project"
       >
         <Space direction="vertical">
           <Form.Item<DataType>
@@ -455,20 +364,20 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                   textAlign: "left",
                 }}
               >
-                Location
+                Project Name
               </Title>
             }
             style={{ marginBottom: "6px" }}
-            name="pile_location"
+            name="project_name"
             rules={[
               {
                 required: true,
-                message: "please input location!",
+                message: "Vui lòng nhập tên Project!",
               },
             ]}
           >
             <Input
-              placeholder="Input Pile Location"
+              placeholder="Nhập Project Name"
               style={{ width: "190px" }}
             ></Input>
           </Form.Item>
@@ -486,11 +395,11 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
               </Title>
             }
             style={{ marginBottom: "6px" }}
-            name="pile_status"
+            name="project_status"
             rules={[
               {
                 required: true,
-                message: "please select a status!",
+                message: "Vui lòng chọn status!",
               },
             ]}
           >
@@ -499,8 +408,8 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
               allowClear
               style={{ width: "190px" }}
             >
-              <Select.Option value="Completed">Completed</Select.Option>
-              <Select.Option value="Not started">Not started</Select.Option>
+              <Select.Option value="Process">Process</Select.Option>
+              <Select.Option value="Done">Done</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item<DataType>
@@ -513,53 +422,19 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                   textAlign: "left",
                 }}
               >
-                Raked
-              </Title>
-            }
-            style={{ marginBottom: "6px" }}
-            name="pile_raked"
-            rules={[
-              {
-                required: true,
-                message: "please select pile raked!",
-              },
-            ]}
-          >
-            <Select
-              placeholder="select a pile raked"
-              allowClear
-              style={{ width: "190px" }}
-            >
-              <Select.Option value="Vertical">Vertical</Select.Option>
-              <Select.Option value="Horizon">Horizon</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item<DataType>
-            label={
-              <Title
-                level={3}
-                style={{
-                  marginBottom: "0px",
-                  width: "90px",
-                  textAlign: "left",
-                }}
-              >
-                Diameter
+                Date
               </Title>
             }
             rules={[
               {
                 required: true,
-                message: "please input diamerter!",
+                message: "Vui lòng chọn ngày!",
               },
             ]}
-            name="pile_diameter"
+            name="project_date"
             style={{ marginBottom: "0" }}
           >
-            <Input
-              style={{ width: "190px" }}
-              placeholder="input diamerter"
-            ></Input>
+            <DatePicker placeholder="Chọn ngày" style={{ width: "190px" }} />
           </Form.Item>
         </Space>
       </ModalAdd>
@@ -567,4 +442,4 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   );
 };
 
-export default PilePlanPage;
+export default ProjectPage;

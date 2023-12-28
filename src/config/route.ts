@@ -1,7 +1,9 @@
 const routes = {
   homepage: "/",
-  pilePlan: "/:projectId/pilePlan",
-  boreLosg: "/:projectId/pilePlan/:pileId",
-  boreLosgDownPdf: "/:projectId/pilePlan/:pileId/download",
+  project: "/projects",
+  pilePlan: "/projects/:projectId/pilePlan",
+  boreLosg: "/projects/:projectId/pilePlan/:pileId",
+  profile: "/profile",
+  settings: "/settings",
 };
 export default routes;

@@ -1,8 +1,7 @@
-import { Fragment, FunctionComponent, Suspense } from "react";
+import { Fragment, FunctionComponent } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes } from "./route";
 import DefaultLayout from "./layout/DefaultLayout";
-import Loading from "./components/Loading/Loading";
 function App() {
   return (
     <Router>
@@ -22,11 +21,9 @@ function App() {
                 key={index}
                 path={route.path}
                 element={
-                  <Suspense fallback={<Loading></Loading>}>
-                    <Layout>
-                      <Page />
-                    </Layout>
-                  </Suspense>
+                  <Layout>
+                    <Page />
+                  </Layout>
                 }
               />
             );

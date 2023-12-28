@@ -1,7 +1,8 @@
 import { Flex, Layout } from "antd";
-import Sider from "antd/es/layout/Sider";
-import { Content, Header } from "antd/es/layout/layout";
+import { Content } from "antd/es/layout/layout";
 import { FunctionComponent, ReactNode } from "react";
+import Header from "../components/Header";
+import Sider from "../components/Sider";
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -9,10 +10,10 @@ interface DefaultLayoutProps {
 
 const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
   return (
-    <Layout style={{ background: "transparent" }}>
-      <Sider width={280} className="h-screen"></Sider>
+    <Layout style={{ background: "transparent" }} className="flex flex-row">
+      <Sider></Sider>
       <Flex className="relative w-full h-screen" vertical>
-        <Header className="fixed top-0 right-0 left-[280px] shadow-sm border-b-[1px]"></Header>
+        <Header></Header>
         <Content
           style={{
             overflow: "scroll",
