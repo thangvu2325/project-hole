@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             },
             components: {
               Layout: {
-                headerBg: "transparent",
+                headerBg: "#fff",
               },
             },
           }}

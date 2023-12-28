@@ -12,12 +12,12 @@ const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
     <Layout style={{ background: "transparent" }}>
       <Sider width={280} className="h-screen"></Sider>
       <Flex className="relative w-full h-screen" vertical>
-        <Header className="fixed top-0 right-0 left-[280px] shadow-md"></Header>
+        <Header className="fixed top-0 right-0 left-[280px] shadow-sm border-b-[1px]"></Header>
         <Content
           style={{
             overflow: "scroll",
-            margin: "0 auto",
             marginTop: "64px",
+            background: "transparent",
           }}
         >
           {children}

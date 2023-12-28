@@ -181,246 +181,246 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   return (
     <div
       style={{
-        overflow: "auto",
-        width: "1000px",
-        marginTop: "50px",
-        background: "#fff",
         padding: "24px 36px",
-        boxShadow:
-          "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
         borderRadius: "6px",
         paddingBottom: "48px",
+        width: "100%",
       }}
     >
       {contextHolder}
-      <Flex justify="space-between">
-        <Title level={1}>Quản Lý Piles</Title>
-        <Button
-          style={{ background: "#6366f1", color: "#fff" }}
-          className="flex items-center"
-          onClick={() => {
-            setOpen(!open);
+      <div className="bg-[#fff]">
+        <Flex justify="space-between">
+          <Title level={1} className="ml-4 mt-4">
+            Quản Lý Piles
+          </Title>
+          <Button
+            style={{ background: "#6366f1", color: "#fff" }}
+            className="flex items-center mr-4 mt-4"
+            onClick={() => {
+              setOpen(!open);
+            }}
+          >
+            <Title
+              level={3}
+              style={{
+                fontWeight: "600",
+                color: "#fff",
+                marginBottom: "0",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <IconPlus width={18} height={18} className="mr-2"></IconPlus> New
+            </Title>
+          </Button>
+        </Flex>
+        <div
+          style={{
+            transition: "height",
+            transitionDuration: "1000ms",
+            transitionTimingFunction: "ease-in-out",
+            height: "40px",
+            overflow: "hidden",
+            marginTop: "16px",
           }}
+          ref={refDiv}
         >
           <Title
             level={3}
+            onClick={handleToggleShowSearchBox}
             style={{
+              padding: "16px",
+              outline: "none",
               fontWeight: "600",
-              color: "#fff",
-              marginBottom: "0",
-              display: "flex",
-              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none",
+              margin: "0",
             }}
           >
-            <IconPlus width={18} height={18} className="mr-2"></IconPlus> New
+            <Flex align="center">
+              <IconChevronDown
+                width={20}
+                height={20}
+                className="mr-2"
+              ></IconChevronDown>
+              <span style={{ fontWeight: "600", fontSize: "16px" }}>
+                Thông tin tìm kiếm
+              </span>
+            </Flex>
           </Title>
-        </Button>
-      </Flex>
-      <div
-        style={{
-          transition: "height",
-          transitionDuration: "1000ms",
-          transitionTimingFunction: "ease-in-out",
-          height: "40px",
-          overflow: "hidden",
-        }}
-        ref={refDiv}
-      >
-        <Title
-          level={3}
-          onClick={handleToggleShowSearchBox}
+          <div className={`w-3/4 mx-auto mb-4`}>
+            <Form
+              initialValues={{
+                pileId: searchParams.get("pileId") ?? "",
+                pile_location: searchParams.get("pile_location") ?? "",
+                pile_diameter: searchParams.get("pile_diameter") ?? "",
+                pile_raked: searchParams.get("pile_raked") ?? "",
+              }}
+              name="basic"
+              onFinish={onFinishSearch}
+              onFinishFailed={onFinishSearchFailed}
+              autoComplete="off"
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Space>
+                    <Form.Item<FieldType>
+                      label={
+                        <Title
+                          level={3}
+                          style={{
+                            width: "112px",
+                            margin: "0",
+                          }}
+                        >
+                          Pile Id
+                        </Title>
+                      }
+                      name="pileId"
+                    >
+                      <Input placeholder="Nhập PileId"></Input>
+                    </Form.Item>
+                  </Space>
+                </Col>
+                <Col span={12}>
+                  <Space>
+                    <Form.Item<FieldType>
+                      label={
+                        <Title
+                          level={3}
+                          style={{
+                            width: "112px",
+                            margin: "0",
+                          }}
+                        >
+                          Pile Location
+                        </Title>
+                      }
+                      name="pile_location"
+                    >
+                      <Input placeholder="Nhập Pile Location"></Input>
+                    </Form.Item>
+                  </Space>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Space>
+                    <Form.Item<FieldType>
+                      label={
+                        <Title
+                          level={3}
+                          style={{
+                            width: "112px",
+                            margin: "0",
+                          }}
+                        >
+                          Pile Diameter
+                        </Title>
+                      }
+                      name="pile_diameter"
+                    >
+                      <Input placeholder="Nhập Pile Diameter"></Input>
+                    </Form.Item>
+                  </Space>
+                </Col>
+                <Col span={12}>
+                  <Space>
+                    <Form.Item<FieldType>
+                      label={
+                        <Title
+                          level={3}
+                          style={{
+                            width: "112px",
+                            margin: "0",
+                          }}
+                        >
+                          Pike Raked
+                        </Title>
+                      }
+                      name="pile_raked"
+                    >
+                      <Input placeholder="Nhập Pike Raked"></Input>
+                    </Form.Item>
+                  </Space>
+                </Col>
+              </Row>
+
+              <Flex
+                justify="end"
+                style={{ marginTop: "12px", marginRight: "32px" }}
+              >
+                <Button
+                  style={{
+                    background: "#ccc",
+                    color: "#fff",
+                    marginRight: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  htmlType="reset"
+                  onClick={() => {
+                    setSearchParams({});
+                  }}
+                >
+                  <Title
+                    level={3}
+                    style={{
+                      fontWeight: "600",
+                      color: "#fff",
+                      padding: "8px 16px",
+                      height: "fit-content",
+                      margin: "0",
+                    }}
+                  >
+                    Clear
+                  </Title>
+                </Button>
+                <Button
+                  style={{
+                    background: "#6366f1",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  htmlType="submit"
+                >
+                  <Title
+                    level={3}
+                    style={{
+                      fontWeight: "600",
+                      color: "#fff",
+                      padding: "8px 16px",
+                      height: "fit-content",
+                      margin: "0",
+                    }}
+                  >
+                    Tìm Kiếm
+                  </Title>
+                </Button>
+              </Flex>
+            </Form>
+          </div>
+        </div>
+        <div
           style={{
-            padding: "16px",
-            outline: "none",
-            fontWeight: "600",
-            cursor: "pointer",
-            userSelect: "none",
-            margin: "0",
+            background: "#fff",
+            boxShadow:
+              "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+            borderRadius: "6px",
           }}
         >
-          <Flex align="center">
-            <IconChevronDown
-              width={20}
-              height={20}
-              className="mr-2"
-            ></IconChevronDown>
-            <span style={{ fontWeight: "600", fontSize: "16px" }}>
-              Thông tin tìm kiếm
-            </span>
-          </Flex>
-        </Title>
-        <div className={`w-3/4 mx-auto mb-4`}>
-          <Form
-            initialValues={{
-              pileId: searchParams.get("pileId") ?? "",
-              pile_location: searchParams.get("pile_location") ?? "",
-              pile_diameter: searchParams.get("pile_diameter") ?? "",
-              pile_raked: searchParams.get("pile_raked") ?? "",
-            }}
-            name="basic"
-            onFinish={onFinishSearch}
-            onFinishFailed={onFinishSearchFailed}
-            autoComplete="off"
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Space>
-                  <Form.Item<FieldType>
-                    label={
-                      <Title
-                        level={3}
-                        style={{
-                          width: "112px",
-                          margin: "0",
-                        }}
-                      >
-                        Pile Id
-                      </Title>
-                    }
-                    name="pileId"
-                  >
-                    <Input placeholder="Nhập PileId"></Input>
-                  </Form.Item>
-                </Space>
-              </Col>
-              <Col span={12}>
-                <Space>
-                  <Form.Item<FieldType>
-                    label={
-                      <Title
-                        level={3}
-                        style={{
-                          width: "112px",
-                          margin: "0",
-                        }}
-                      >
-                        Pile Location
-                      </Title>
-                    }
-                    name="pile_location"
-                  >
-                    <Input placeholder="Nhập Pile Location"></Input>
-                  </Form.Item>
-                </Space>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Space>
-                  <Form.Item<FieldType>
-                    label={
-                      <Title
-                        level={3}
-                        style={{
-                          width: "112px",
-                          margin: "0",
-                        }}
-                      >
-                        Pile Diameter
-                      </Title>
-                    }
-                    name="pile_diameter"
-                  >
-                    <Input placeholder="Nhập Pile Diameter"></Input>
-                  </Form.Item>
-                </Space>
-              </Col>
-              <Col span={12}>
-                <Space>
-                  <Form.Item<FieldType>
-                    label={
-                      <Title
-                        level={3}
-                        style={{
-                          width: "112px",
-                          margin: "0",
-                        }}
-                      >
-                        Pike Raked
-                      </Title>
-                    }
-                    name="pile_raked"
-                  >
-                    <Input placeholder="Nhập Pike Raked"></Input>
-                  </Form.Item>
-                </Space>
-              </Col>
-            </Row>
-
-            <Flex
-              justify="end"
-              style={{ marginTop: "12px", marginRight: "32px" }}
-            >
-              <Button
-                style={{
-                  background: "#ccc",
-                  color: "#fff",
-                  marginRight: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                htmlType="reset"
-                onClick={() => {
-                  setSearchParams({});
-                }}
-              >
-                <Title
-                  level={3}
-                  style={{
-                    fontWeight: "600",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    height: "fit-content",
-                    margin: "0",
-                  }}
-                >
-                  Clear
-                </Title>
-              </Button>
-              <Button
-                style={{
-                  background: "#6366f1",
-                  color: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                htmlType="submit"
-              >
-                <Title
-                  level={3}
-                  style={{
-                    fontWeight: "600",
-                    color: "#fff",
-                    padding: "8px 16px",
-                    height: "fit-content",
-                    margin: "0",
-                  }}
-                >
-                  Tìm Kiếm
-                </Title>
-              </Button>
-            </Flex>
-          </Form>
+          <Table
+            columns={columns}
+            dataSource={pilePlans.map((pilePlan) => {
+              return {
+                ...pilePlan,
+                key: pilePlan.pileId,
+              };
+            })}
+            pagination={{ pageSize: 4 }}
+          />
         </div>
-      </div>
-      <div
-        style={{
-          background: "#fff",
-          boxShadow:
-            "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-          borderRadius: "6px",
-        }}
-      >
-        <Table
-          columns={columns}
-          dataSource={pilePlans.map((pilePlan) => {
-            return {
-              ...pilePlan,
-              key: pilePlan.pileId,
-            };
-          })}
-          pagination={{ pageSize: 3 }}
-        />
       </div>
       <Flex justify="end" style={{ marginTop: "24px", marginRight: "24px" }}>
         <Button
