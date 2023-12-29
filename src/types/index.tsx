@@ -42,6 +42,8 @@ export type FormBorelogDataType = {
   groutLength?: string;
   ofBag?: string;
   api?: string;
+  apiPileLength?: string;
+  boringRig?: string;
   permanent?: string;
   deep?: Array<deepType>;
 };

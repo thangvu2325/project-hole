@@ -39,10 +39,10 @@ const Sider: FunctionComponent<SiderProps> = () => {
   const dispatch = useAppDispatch();
   const siderStatus = useAppSelector(settingsSelector)?.siderState;
   const items: MenuItem[] = [
-    getItem("Quản Lý Projects", "sub3", <Fragment></Fragment>, [
+    getItem("Project Manager", "sub3", <Fragment></Fragment>, [
       getItem(
         <Link to={"/projects"} className="whitespace-nowrap">
-          Danh Sách Projects
+          Project List
         </Link>,
         "/projects",
         <Fragment></Fragment>

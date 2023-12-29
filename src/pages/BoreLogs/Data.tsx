@@ -1,15 +1,29 @@
+/* eslint-disable no-unexpected-multiline */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "antd";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { setState } from "../../redux/formBorelogSlice";
 import { FormBorelogDataType } from "../../types";
-import { useLocation, useNavigate } from "react-router-dom";
-import { formBorelogSelector } from "../../redux/selector";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  formBorelogSelector,
+  pileplansSelector,
+  projectsSelector,
+} from "../../redux/selector";
 import { IconChevronLeft } from "@tabler/icons-react";
+import * as XLSX from "xlsx";
 
 function Data() {
   const navigate = useNavigate();
   const location = useLocation();
+  const params = useParams();
+  const pileFouded = useAppSelector(pileplansSelector).data.find(
+    (pile) => pile.pileId === params.pileId
+  );
+  const projectFounded = useAppSelector(projectsSelector).data.find(
+    (project) => project.projectId === pileFouded?.projectId
+  );
   const formDataBoreLogs = useAppSelector(formBorelogSelector).data;
   const [formData, setFormData] =
     useState<FormBorelogDataType>(formDataBoreLogs);
@@ -19,7 +33,175 @@ function Data() {
     dispatch(setState(formData));
     navigate(location.pathname + "/example");
   };
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const data = event.target?.result as string;
+        const workbook = XLSX.read(data, { type: "binary" });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        const dataReaded: Array<string[]> = (
+          jsonData as Array<string[]>
+        ).filter((item) => item.length > 0);
+        const dataWillSet: FormBorelogDataType = {};
+        dataReaded.forEach((element, findex) => {
+          element.forEach((item, index) => {
+            switch (item.toString().trim()) {
+              case "Pile No":
+                dataWillSet.pileNo = dataReaded[findex + 1][index];
+                break;
+              case "Boring Rig":
+                dataWillSet.boringRig = dataReaded[findex + 1][index];
+                break;
+              case "Boring Start":
+                dataWillSet.boringStartDate = new Date(
+                  dataReaded[findex + 1][index].split("|")[0].trim()
+                )
+                  .toISOString()
+                  .split("T")[0];
+                dataWillSet.boringStartTime = new Date(
+                  `1970-01-01T${dataReaded[findex + 1][index]
+                    .split("|")
+                    [
+                      dataReaded[findex + 1][index].split("|").length - 1
+                    ].trim()}`
+                ).toLocaleTimeString("en-US", { hour12: false });
+                break;
+              case "Boring End":
+                dataWillSet.boringEndDate = new Date(
+                  dataReaded[findex + 1][index].split("|")[0].trim()
+                )
+                  .toISOString()
+                  .split("T")[0];
+                dataWillSet.boringEndTime = new Date(
+                  `1970-01-01T${dataReaded[findex + 1][index]
+                    .split("|")
+                    [
+                      dataReaded[findex + 1][index].split("|").length - 1
+                    ].trim()}`
+                ).toLocaleTimeString("en-US", { hour12: false });
+                break;
+              case "Groupting Start":
+                dataWillSet.groutingStartDate = new Date(
+                  dataReaded[findex + 1][index].split("|")[0].trim()
+                )
+                  .toISOString()
+                  .split("T")[0];
+                dataWillSet.groutingStartTime = new Date(
+                  `1970-01-01T${dataReaded[findex + 1][index]
+                    .split("|")
+                    [
+                      dataReaded[findex + 1][index].split("|").length - 1
+                    ].trim()}`
+                ).toLocaleTimeString("en-US", { hour12: false });
+                break;
+              case "Groupting End":
+                // eslint-disable-next-line no-case-declarations
+                dataWillSet.groutingEndDate = new Date(
+                  dataReaded[findex + 1][index]
+                    .split("|")[0]
+                    .split("/")
+                    .reverse()
+                    .join("/")
+                )
+                  .toISOString()
+                  .split("T")[0];
+
+                dataWillSet.groutingEndTime = new Date(
+                  `1970-01-01T${dataReaded[findex + 1][index]
+                    .split("|")
+                    [
+                      dataReaded[findex + 1][index].split("|").length - 1
+                    ].trim()}`
+                ).toLocaleTimeString("en-US", { hour12: false });
+
+                break;
+              case "Platform (RL)":
+                dataWillSet.platformLevel = dataReaded[findex + 1][index];
+                break;
+              case "Top of Casing (RL)":
+                dataWillSet.topOfCasing = dataReaded[findex + 1][index];
+                break;
+              case "Cut-off Level (RL)":
+                dataWillSet.cutOffLevel = dataReaded[findex + 1][index];
+                break;
+              case "Bored Depth (m) fr. TOC":
+                dataWillSet.toc = dataReaded[findex + 1][index];
+                break;
+              case "Toe Level (RL)":
+                dataWillSet.toe = dataReaded[findex + 1][index];
+                break;
+              case "Bored Depth (m) fr. OLG":
+                dataWillSet.ogl = dataReaded[findex + 1][index];
+                break;
+              case "Pile Length (m)":
+                dataWillSet.pileLength = dataReaded[findex + 1][index];
+                break;
+              case "Soil Drilling":
+                dataWillSet.soilDrilling = dataReaded[findex + 1][index];
+                break;
+              case "Total weathered Rock, Boulders,\r\nCavity (m)":
+                dataWillSet.totalWeathered = dataReaded[findex + 1][index];
+
+                break;
+              case "Rock Socket Length (m)":
+                dataWillSet.rockSocket = dataReaded[findex + 1][index];
+                break;
+              case "Grout Length (m)":
+                dataWillSet.groutLength = dataReaded[findex + 1][index];
+                break;
+              case "Nos of Bag":
+                dataWillSet.ofBag = dataReaded[findex + 1][index];
+                break;
+              case "API Pipe Size (mm)":
+                dataWillSet.apiPileLength = dataReaded[findex + 1][index];
+                break;
+              case "API Pipe Length (m)":
+                dataWillSet.api = dataReaded[findex + 1][index];
+                break;
+              case "Permanent Casing (m)":
+                dataWillSet.permanent = dataReaded[findex + 1][index];
+                break;
+            }
+          });
+        });
+        dispatch(setState(dataWillSet));
+        setFormData((prev) => ({ ...prev, ...dataWillSet }));
+      };
+
+      reader.readAsBinaryString(file);
+    }
+  };
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      projectDate: projectFounded
+        ? new Date(projectFounded?.project_date.split("/").reverse().join("/"))
+            .toISOString()
+            .split("T")[0]
+        : "",
+    }));
+    dispatch(
+      setState({
+        projectDate: projectFounded
+          ? new Date(
+              projectFounded?.project_date.split("/").reverse().join("/")
+            )
+              .toISOString()
+              .split("T")[0]
+          : "",
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectFounded]);
   return (
     <div
       style={{
@@ -31,6 +213,14 @@ function Data() {
     >
       <div className="bg-[#fff] p-4 rounded-md shadow-md">
         <div className="container relative">
+          <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
+          <a
+            id="downloadLink"
+            href="https://drive.google.com/uc?export=download&id=1UOgWTLj6GSqhGtn8lyoF032xsaIYPCAp"
+            download="data.xlsx"
+          >
+            <Button type="primary">File Excel mẫu để import</Button>
+          </a>
           <form className="row m-[20px]" onSubmit={handleClick}>
             <div className="col-6 mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -40,7 +230,7 @@ function Data() {
                 type="date"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.projectDate}
+                value={formData.projectDate ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -59,7 +249,7 @@ function Data() {
               <input
                 className="form-control"
                 id="exampleFormControlTextarea1"
-                value={formData.pileNo}
+                value={formData.pileNo ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, pileNo: e.target.value }))
                 }
@@ -73,13 +263,13 @@ function Data() {
                 type="date"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.boringStartDate}
-                onChange={(e) =>
-                  setFormData((prev) => ({
+                value={formData.boringStartDate ?? ""}
+                onChange={(e) => {
+                  return setFormData((prev) => ({
                     ...prev,
                     boringStartDate: e.target.value,
-                  }))
-                }
+                  }));
+                }}
               />
             </div>
             <div className="col-3 mb-3">
@@ -93,7 +283,7 @@ function Data() {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 type="time"
-                value={formData.boringStartTime}
+                value={formData.boringStartTime ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -113,7 +303,7 @@ function Data() {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 type="date"
-                value={formData.boringEndDate}
+                value={formData.boringEndDate ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -133,7 +323,7 @@ function Data() {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 type="time"
-                value={formData.boringEndTime}
+                value={formData.boringEndTime ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -150,7 +340,7 @@ function Data() {
                 type="date"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.groutingStartDate}
+                value={formData.groutingStartDate ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -170,7 +360,7 @@ function Data() {
                 className="form-control"
                 id="exampleFormControlTextarea1"
                 type="time"
-                value={formData.groutingStartTime}
+                value={formData.groutingStartTime ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -187,7 +377,7 @@ function Data() {
                 type="date"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.groutingEndDate}
+                value={formData.groutingEndDate ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -204,7 +394,7 @@ function Data() {
                 type="time"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.groutingEndTime}
+                value={formData.groutingEndTime ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -221,7 +411,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.platformLevel}
+                value={formData.platformLevel ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -238,7 +428,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.topOfCasing}
+                value={formData.topOfCasing ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -255,7 +445,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.cutOffLevel}
+                value={formData.cutOffLevel ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -272,7 +462,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.toc}
+                value={formData.toc ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -289,7 +479,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.toe}
+                value={formData.toe ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -306,7 +496,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.ogl}
+                value={formData.ogl ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -323,7 +513,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.pileLength}
+                value={formData.pileLength ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -340,7 +530,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.soilDrilling}
+                value={formData.soilDrilling ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -357,7 +547,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.totalWeathered}
+                value={formData.totalWeathered ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -374,7 +564,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.rockSocket}
+                value={formData.rockSocket ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -391,7 +581,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.groutLength}
+                value={formData.groutLength ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -408,7 +598,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.ofBag}
+                value={formData.ofBag ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -425,7 +615,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.api}
+                value={formData.api ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -442,7 +632,7 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.permanent}
+                value={formData.permanent ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -457,7 +647,7 @@ function Data() {
               htmlType="submit"
               className="btn btn-primary flex items-center justify-center w-[600px] h-8 mx-auto"
             >
-              Submit
+              Save
             </Button>
           </form>
           <Button

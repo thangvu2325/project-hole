@@ -144,11 +144,11 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         addPilePlant({ ...values, projectId: projectFounded?.projectId })
       );
       api["success"]({
-        message: "Thêm Pile Thành Công!",
+        message: "Success!",
       });
     } catch (error) {
       api["error"]({
-        message: "Thêm Pile Thất Bại",
+        message: "Error",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -191,7 +191,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
       <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md pb-3">
         <Flex justify="space-between">
           <Title level={1} className="ml-4 mt-4">
-            Quản Lý Piles
+            Pile Manager
           </Title>
           <Button
             style={{ background: "#6366f1", color: "#fff" }}
@@ -244,7 +244,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                 className="mr-2"
               ></IconChevronDown>
               <span style={{ fontWeight: "600", fontSize: "16px" }}>
-                Thông tin tìm kiếm
+                Search information
               </span>
             </Flex>
           </Title>
@@ -395,7 +395,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                       margin: "0",
                     }}
                   >
-                    Tìm Kiếm
+                    Search
                   </Title>
                 </Button>
               </Flex>

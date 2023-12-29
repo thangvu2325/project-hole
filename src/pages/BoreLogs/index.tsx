@@ -19,11 +19,11 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
     try {
       dispatch(setState({ deep: value }));
       api["success"]({
-        message: "Thành công!",
+        message: "Success!",
       });
     } catch (error) {
       api["error"]({
-        message: "Thất bại!",
+        message: "Error!",
       });
     }
   }, []);

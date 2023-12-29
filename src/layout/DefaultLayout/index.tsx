@@ -16,7 +16,7 @@ const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
     <Layout style={{ background: "transparent" }} className="flex flex-row">
       <Sider></Sider>
       <Header
-        className={` ${
+        className={`${
           siderStatus === "idle"
             ? "left-72"
             : siderStatus

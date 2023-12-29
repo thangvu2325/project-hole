@@ -118,11 +118,11 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
         })
       );
       api["success"]({
-        message: "Thêm Project Thành Công!",
+        message: "Success!",
       });
     } catch (error) {
       api["error"]({
-        message: "Thêm Project Thất Bại",
+        message: "Failed",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,7 +148,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
         project_date: searchParams.get("project_date") ?? "",
       })
     );
-    document.title = "Quản Lý Project";
+    document.title = "Micropile Borelog";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -164,7 +164,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
       <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md">
         <Flex justify="space-between">
           <Title level={1} className="ml-4 mt-4">
-            Quản Lý Projects
+            Micropile Borelog
           </Title>
           <Button
             style={{ background: "#6366f1", color: "#fff" }}
@@ -216,7 +216,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                 className="mr-2"
               ></IconChevronDown>
               <span style={{ fontWeight: "600", fontSize: "16px" }}>
-                Thông tin tìm kiếm
+                Search information
               </span>
             </Flex>
           </Title>
@@ -324,7 +324,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                       margin: "0",
                     }}
                   >
-                    Tìm Kiếm
+                    Search
                   </Title>
                 </Button>
               </Flex>

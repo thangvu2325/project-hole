@@ -5,8 +5,9 @@ import { FunctionComponent } from "react";
 import { deepType } from "../../types";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/hook";
+import { formBorelogSelector } from "../../redux/selector";
 
-const mockData: deepType[] = [{ depth: 0, description: "Top of Borehole" }];
 interface EditableTableFormProps {
   handleChangeTable: (value: deepType[]) => void;
 }
@@ -22,18 +23,20 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
         .filter((item) => item.depth !== null && item.description !== "")
         .sort((a, b) => a.depth - b.depth)
     );
-    console.log(
-      values.data
-        .slice(1)
-        .filter((item) => item.depth !== null && item.description !== "")
-        .sort((a, b) => a.depth - b.depth)
-    );
   };
+  const deep = useAppSelector(formBorelogSelector)?.data?.deep;
+  const defaultData: deepType[] = [
+    { depth: 0, description: "Top of Borehole" },
+    ...(deep ? deep : []),
+  ];
+  console.log(defaultData);
   return (
     <Form
       name="dynamic_form_item"
       onFinish={onFinish}
-      initialValues={{ data: mockData }}
+      initialValues={{
+        data: defaultData,
+      }}
     >
       <Form.List name="data">
         {(data, { add, remove }) => (
@@ -61,7 +64,7 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                     htmlType="submit"
                     className="bg-gray-600 mr-4 w-20 flex justify-center items-center"
                   >
-                    Submit
+                    Save
                   </Button>
                 </Flex>
               </Flex>
@@ -74,7 +77,7 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                 <Form.Item
                   name={[index, "depth"]}
                   style={{ marginBottom: "0" }}
-                  initialValue={index === 0 ? mockData[0].depth : undefined}
+                  initialValue={index === 0 ? defaultData[0].depth : undefined}
                 >
                   <Input
                     placeholder="depth"
@@ -93,7 +96,7 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                   name={[index, "description"]}
                   style={{ marginBottom: "0" }}
                   initialValue={
-                    index === 0 ? mockData[0].description : undefined
+                    index === 0 ? defaultData[0].description : undefined
                   }
                 >
                   <Input

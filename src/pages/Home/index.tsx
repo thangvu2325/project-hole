@@ -4,11 +4,11 @@ interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
   useEffect(() => {
-    document.title = "Trang Chủ";
+    document.title = "SHINEI";
   }, []);
   return (
     <div className="text-center mt-28 text-[30px] font-[600]">
-      Trang này sau này là Dashboard
+      Site Progress Reporting
     </div>
   );
 };
