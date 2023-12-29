@@ -10,10 +10,11 @@ import {
 } from "@tabler/icons-react";
 import { Link, useLocation } from "react-router-dom";
 import type { MenuProps } from "antd";
-import logo from "../../assets/image/Micropile Borelogs.png";
-import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import { toggleStatusSider } from "../../redux/settingsSlice";
-import { settingsSelector } from "../../redux/selector";
+import logo from "../../../assets/image/Micropile Borelogs.png";
+import { useAppDispatch, useAppSelector } from "../../../redux/hook";
+import { toggleStatusSider } from "../../../redux/settingsSlice";
+import { settingsSelector } from "../../../redux/selector";
+import "./Sider.css"
 
 type MenuItem = Required<MenuProps>["items"][number];
 interface SiderProps {}
@@ -62,7 +63,7 @@ const Sider: FunctionComponent<SiderProps> = () => {
       }`}
     >
       <div
-        className={`absolute top-[50%] translate-y-[-50%] ${
+        className={`absolute top-[50%] btn translate-y-[-50%] ${
           siderStatus ? "right-[-16px]" : "right-[-20px]"
         }   bg-[#6366f1] w-10 h-10 rounded-[56px] z-40 flex items-center  ${
           siderStatus ? "justify-center" : "justify-end"

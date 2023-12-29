@@ -1,0 +1,12 @@
+@media (max-width: 360px) {
+   .fixed{
+    height: 100%;
+    width: 100%;
+    }
+    .IconChevronLeft{
+        margin-left: 80px;
+    }
+    .IconChevronRight{
+        margin-right: 30px;
+    }
+}

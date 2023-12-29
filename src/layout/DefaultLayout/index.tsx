@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { FunctionComponent, ReactNode } from "react";
 import Header from "../components/Header";
-import Sider from "../components/Sider";
+import Sider from "../components/Slider/Sider";
 import { useAppSelector } from "../../redux/hook";
 import { settingsSelector } from "../../redux/selector";
 

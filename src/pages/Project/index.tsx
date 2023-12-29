@@ -26,7 +26,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { addProject, editFilter } from "../../redux/projectsSlice";
 import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import ModalAdd from "../../components/ModalAdd";
-
+import "./index.css"
 interface ProjectPageProps {}
 interface DataType {
   key?: string;
@@ -153,6 +153,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
   }, []);
   return (
     <div
+    className="container"
       style={{
         padding: "24px 36px",
         borderRadius: "6px",
@@ -231,6 +232,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
               onFinish={onFinishSearch}
               onFinishFailed={onFinishSearchFailed}
               autoComplete="off"
+              className="scroll"
             >
               <Row gutter={16}>
                 <Col span={12}>
@@ -292,18 +294,9 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                     setSearchParams({});
                   }}
                 >
-                  <Title
-                    level={3}
-                    style={{
-                      fontWeight: "600",
-                      color: "#fff",
-                      padding: "8px 16px",
-                      height: "fit-content",
-                      margin: "0",
-                    }}
-                  >
+                  <p style={{fontWeight: "600",}}>
                     Clear
-                  </Title>
+                  </p>
                 </Button>
                 <Button
                   style={{
@@ -314,18 +307,9 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                   }}
                   htmlType="submit"
                 >
-                  <Title
-                    level={3}
-                    style={{
-                      fontWeight: "600",
-                      color: "#fff",
-                      padding: "8px 16px",
-                      height: "fit-content",
-                      margin: "0",
-                    }}
-                  >
+                   <p style={{fontWeight: "600",}}></p>
                     Tìm Kiếm
-                  </Title>
+                  
                 </Button>
               </Flex>
             </Form>
@@ -340,9 +324,11 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
           }}
         >
           <Table
+            className="table1"
             columns={columns}
             dataSource={tableData}
             pagination={{ pageSize: 10 }}
+            scroll={{ x: true }}
           />
         </div>
       </div>
