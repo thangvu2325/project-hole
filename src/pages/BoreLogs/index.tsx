@@ -37,7 +37,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
   };
   const formData = useAppSelector(formBorelogSelector).data;
   return (
-    <div className=" bg-[#fff] shadow-lg">
+    <div className=" bg-[#fff] shadow-lg rounded-md">
       <ReactToPrint
         trigger={() => (
           <Button

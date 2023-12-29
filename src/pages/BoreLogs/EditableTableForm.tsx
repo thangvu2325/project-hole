@@ -16,7 +16,18 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const onFinish = (values: { data: dataType[] }) => {
-    handleChangeTable(values.data.slice(1));
+    handleChangeTable(
+      values.data
+        .slice(1)
+        .filter((item) => item.depth !== null && item.description !== "")
+        .sort((a, b) => a.depth - b.depth)
+    );
+    console.log(
+      values.data
+        .slice(1)
+        .filter((item) => item.depth !== null && item.description !== "")
+        .sort((a, b) => a.depth - b.depth)
+    );
   };
   return (
     <Form
