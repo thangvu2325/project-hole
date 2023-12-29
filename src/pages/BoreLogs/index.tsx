@@ -1,77 +1,43 @@
-import { Button } from "antd";
-import { FunctionComponent, useCallback, useRef, useState } from "react";
-import ReactToPrint from "react-to-print";
-import DocumentExportPDF from "./DocumentExportPDF";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FunctionComponent, useCallback } from "react";
 import Title from "antd/es/typography/Title";
-import { IconChevronDown } from "@tabler/icons-react";
 import EditableTableForm from "./EditableTableForm";
-import { useAppSelector } from "../../redux/hook";
-import { formBorelogSelector } from "../../redux/selector";
+import { useAppDispatch } from "../../redux/hook";
+import { deepType } from "../../types";
+import { setState } from "../../redux/formBorelogSlice";
+import { Link, useLocation } from "react-router-dom";
 
 interface BoreLogProps {}
-export type dataType = {
-  depth: number;
-  description: string;
-};
+
 const BoreLog: FunctionComponent<BoreLogProps> = () => {
-  const [data, setData] = useState<dataType[]>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const componentRef = useRef<any>(null);
-  const refDiv = useRef<HTMLDivElement>(null);
-  const handleToggleShowSearchBox = () => {
-    if (refDiv.current) {
-      refDiv.current.classList.toggle("h-260");
-    }
-  };
-  const handleChangeTable = useCallback((value: dataType[]) => {
-    setData(value);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const handleChangeTable = useCallback((value: deepType[]) => {
+    dispatch(setState({ deep: value }));
   }, []);
-  const handlePrint = () => {
-    // Use the ReactToPrint component to initiate the printing
-    // componentRef.current contains the reference to the component you want to print
-    if (componentRef.current) {
-      // Trigger the print action
-      componentRef.current.onPrint();
-      componentRef.current.style.display = "block";
-    }
-  };
-  const formData = useAppSelector(formBorelogSelector).data;
   return (
-    <div className=" bg-[#fff] shadow-lg rounded-md">
-      <ReactToPrint
-        trigger={() => (
-          <Button
-            type="primary"
-            style={{ margin: "8px 16px " }}
-            onClick={handlePrint}
+    <div
+      style={{
+        padding: "24px 36px",
+        borderRadius: "6px",
+        paddingBottom: "48px",
+        width: "100%",
+      }}
+    >
+      <div className=" bg-[#fff] shadow-lg rounded-md pb-4">
+        <Link to={location.pathname + "/previewpdf"} className="flex">
+          <Title
+            level={3}
+            className="m-4 p-2 whitespace-nowrap flex items-center outline-none font-semibold cursor-pointer select-none underline"
           >
-            Export
-          </Button>
-        )}
-        content={() => componentRef.current}
-      />
-      <div className="bg-[#fff]">
+            Preview PDF
+          </Title>
+        </Link>
         <div className="px-4">
           <EditableTableForm
             handleChangeTable={handleChangeTable}
           ></EditableTableForm>
-        </div>
-        <div
-          className="transition-height duration-1000 ease-in-out h-12 overflow-hidden"
-          ref={refDiv}
-        >
-          <Title
-            level={3}
-            className="p-4 flex items-center outline-none font-semibold cursor-pointer select-none"
-            onClick={handleToggleShowSearchBox}
-          >
-            <IconChevronDown></IconChevronDown>Preview PDF
-          </Title>
-          <DocumentExportPDF
-            ref={componentRef}
-            data={data ?? []}
-            formData={formData}
-          ></DocumentExportPDF>
         </div>
       </div>
     </div>

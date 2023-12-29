@@ -2,20 +2,20 @@ import { Form, Input, Button, Table, Flex } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Column from "antd/es/table/Column";
 import { FunctionComponent } from "react";
-import { dataType } from ".";
+import { deepType } from "../../types";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
-const mockData: dataType[] = [{ depth: 0, description: "Top of Borehole" }];
+const mockData: deepType[] = [{ depth: 0, description: "Top of Borehole" }];
 interface EditableTableFormProps {
-  handleChangeTable: (value: dataType[]) => void;
+  handleChangeTable: (value: deepType[]) => void;
 }
 
 const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
   handleChangeTable,
 }) => {
   const navigate = useNavigate();
-  const onFinish = (values: { data: dataType[] }) => {
+  const onFinish = (values: { data: deepType[] }) => {
     handleChangeTable(
       values.data
         .slice(1)

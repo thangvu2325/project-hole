@@ -43,4 +43,9 @@ export type FormBorelogDataType = {
   ofBag?: string;
   api?: string;
   permanent?: string;
+  deep?: Array<deepType>;
+};
+export type deepType = {
+  depth: number;
+  description: string;
 };

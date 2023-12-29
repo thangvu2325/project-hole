@@ -18,7 +18,7 @@ const formBorelogSlice = createSlice({
   initialState,
   reducers: {
     setState(state, action: PayloadAction<FormBorelogDataType>) {
-      state.data = action.payload;
+      state.data = { ...state.data, ...action.payload };
     },
   },
 });

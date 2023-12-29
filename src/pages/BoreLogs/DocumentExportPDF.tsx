@@ -1,6 +1,5 @@
 import Title from "antd/es/typography/Title";
 import { Component } from "react";
-import { dataType } from ".";
 import logo from "../../assets/image/Micropile Borelogs.png";
 import { Flex, Image } from "antd";
 import { FormBorelogDataType } from "../../types";
@@ -8,7 +7,6 @@ import { FormBorelogDataType } from "../../types";
 type DocumentExportPDFProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: React.MutableRefObject<any>;
-  data: dataType[];
   className?: string;
   formData?: FormBorelogDataType;
 };
@@ -371,8 +369,8 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <div className="col-span-5 grid grid-cols-5 border-[2px] border-solid border-[#e5e7eb]">
             <div className="col-span-1 border-[2px] border-solid border-l-0 border-[#e5e7eb]"></div>
             <div className="col-span-4 border-[2px] border-solid border-[#e5e7eb]">
-              {this.props.data.length
-                ? this.props.data.map((item, index, array) => {
+              {this.formData?.deep?.length
+                ? this.formData?.deep.map((item, index, array) => {
                     const deepest = array[array.length - 1].depth;
                     const deep =
                       index > 0
