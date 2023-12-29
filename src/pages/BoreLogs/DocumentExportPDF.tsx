@@ -3,16 +3,20 @@ import { Component } from "react";
 import { dataType } from ".";
 import logo from "../../assets/image/Micropile Borelogs.png";
 import { Flex, Image } from "antd";
+import { FormBorelogDataType } from "../../types";
+
 type DocumentExportPDFProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: React.MutableRefObject<any>;
   data: dataType[];
   className?: string;
+  formData?: FormBorelogDataType;
 };
 export default class DocumentExportPDF extends Component<DocumentExportPDFProps> {
+  formData = this.props.formData;
   render() {
     return (
-      <div className="mx-[80px] mt-[30px] text-[16px]">
+      <div className="mx-[80px] mt-[30px] text-[12px]">
         <Flex justify="space-between" align="end" className="mb-3">
           <Image
             preview={false}
@@ -55,6 +59,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <input
             className="col-span-1 border-2  pl-[4px] sm:p-[2px]"
             type="text"
+            value={this.formData?.projectDate ?? ""}
           ></input>
         </div>
         <div className="grid grid-cols-10 ">
@@ -62,6 +67,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <input
             className="col-span-4 border-2  pl-[4px] sm:p-[2px]"
             type="text"
+            value={this.formData?.pileNo ?? ""}
           ></input>
           <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Pile Dia</p>
           <p className="col-span-2 border-2  pl-[4px] sm:p-[2px]">200mm</p>
@@ -96,10 +102,12 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.boringStartDate ?? ""}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.boringStartTime ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -107,10 +115,12 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.boringEndDate ?? ""}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.boringEndTime ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -129,10 +139,12 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.groutingStartDate ?? ""}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.groutingStartTime ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -140,10 +152,12 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.groutingEndDate ?? ""}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.groutingEndTime ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -154,6 +168,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.platformLevel ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -164,6 +179,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.topOfCasing ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -174,6 +190,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.cutOffLevel ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -184,6 +201,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.toc ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -194,6 +212,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.toe ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -204,6 +223,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.ogl ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -214,6 +234,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.pileLength ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -224,6 +245,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.soilDrilling ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -234,6 +256,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.totalWeathered ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -244,6 +267,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.rockSocket ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -254,6 +278,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.groutLength ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -264,6 +289,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.ofBag ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -283,6 +309,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.api ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -293,6 +320,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={this.formData?.permanent ?? ""}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -314,6 +342,28 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
             <div className="col-span-5 grid grid-cols-5">
               <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px]">
                 Remarks
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px] h-[80px]"></p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <div className="col-span-5 border-2 pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Record by SHINEL's representative:</p>
+                <p className="self-end">Name:</p>
+              </div>
+            </div>
+
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2 pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Checked and Verified by Client's Rep:</p>
+                <p className="self-end">Name:</p>
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2  pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Checked and Verified by Engineer's Rep:</p>
+                <p className="self-end">Name:</p>
               </p>
             </div>
           </div>

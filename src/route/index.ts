@@ -9,6 +9,7 @@ import PilePlanPage from "../pages/PilePlan";
 import BoreLog from "../pages/BoreLogs";
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
+import DataPage from "../pages/BoreLogs/Data";
 // const Home = lazy(() => import("../pages/Home"));
 // const PilePlan = lazy(() => import("../pages/PilePlan"));
 // const boreLosg = lazy(() => import("../pages/BoreLogs"));
@@ -25,6 +26,7 @@ const publicRoutes: Array<RouteType> = [
   { path: routes.boreLosg, component: BoreLog },
   { path: routes.profile, component: ProfilePage },
   { path: routes.settings, component: SettingsPage },
+  { path: routes.addData, component: DataPage },
   { path: "*", component: Home },
 ];
 const privateRoutes: Array<RouteType> = [];

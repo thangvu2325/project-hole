@@ -5,6 +5,8 @@ import DocumentExportPDF from "./DocumentExportPDF";
 import Title from "antd/es/typography/Title";
 import { IconChevronDown } from "@tabler/icons-react";
 import EditableTableForm from "./EditableTableForm";
+import { useAppSelector } from "../../redux/hook";
+import { formBorelogSelector } from "../../redux/selector";
 
 interface BoreLogProps {}
 export type dataType = {
@@ -33,6 +35,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
       componentRef.current.style.display = "block";
     }
   };
+  const formData = useAppSelector(formBorelogSelector).data;
   return (
     <div className=" bg-[#fff] shadow-lg">
       <ReactToPrint
@@ -67,6 +70,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
           <DocumentExportPDF
             ref={componentRef}
             data={data ?? []}
+            formData={formData}
           ></DocumentExportPDF>
         </div>
       </div>

@@ -3,11 +3,14 @@ import { PilePlansState } from "./pileplansSlice";
 import { ProjectsState } from "./projectsSlice";
 import { RootState } from "./store";
 import { SettingsState } from "./settingsSlice";
+import { FormBorelogDataState } from "./formBorelogSlice";
 
 export const projectsSelector = (state: RootState): ProjectsState =>
   state.projects;
 export const settingsSelector = (state: RootState): SettingsState =>
   state.settings;
+export const formBorelogSelector = (state: RootState): FormBorelogDataState =>
+  state.formBorelogData;
 export const projectsRemainingSelector = createSelector(
   projectsSelector,
   (projectData) => {
