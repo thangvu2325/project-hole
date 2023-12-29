@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../redux/hook";
 import { deepType } from "../../types";
 import { setState } from "../../redux/formBorelogSlice";
 import { Link, useLocation } from "react-router-dom";
+import { notification } from "antd";
 
 interface BoreLogProps {}
 
@@ -13,8 +14,18 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const [api, contextHolder] = notification.useNotification();
   const handleChangeTable = useCallback((value: deepType[]) => {
-    dispatch(setState({ deep: value }));
+    try {
+      dispatch(setState({ deep: value }));
+      api["success"]({
+        message: "Thành công!",
+      });
+    } catch (error) {
+      api["error"]({
+        message: "Thất bại!",
+      });
+    }
   }, []);
   return (
     <div
@@ -25,6 +36,7 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
         width: "100%",
       }}
     >
+      {contextHolder}
       <div className=" bg-[#fff] shadow-lg rounded-md pb-4">
         <Link to={location.pathname + "/previewpdf"} className="flex">
           <Title
