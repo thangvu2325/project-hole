@@ -12,40 +12,42 @@ type DocumentExportPDFProps = {
 export default class DocumentExportPDF extends Component<DocumentExportPDFProps> {
   render() {
     return (
-      <div className="mx-[80px] mt-[30px] text-[16px]">
+      <div className="mx-[80px] mt-[30px] text-[14px]">
         <Flex justify="space-between" align="end" className="mb-3">
-          <Image
-            preview={false}
-            src={logo}
-            height={70}
-            className="ml-1"
-          ></Image>
-          <Flex vertical>
-            <Title level={3} style={{ textAlign: "center" }}>
-              SHINEI GEOTECHNIQUE (M)SDN. BHD
-            </Title>
-            <Title level={3} style={{ textAlign: "center" }}>
-              MICROPILE BORELOG
-            </Title>
-          </Flex>
-          <Flex style={{ marginBottom: "-18px" }} align="end">
-            <Title
-              style={{
-                border: "2px solid #e5e7eb",
-                padding: "4px 6px",
-              }}
-              level={3}
-            >
-              Log No.
-            </Title>
-            <Title
-              style={{ border: "2px solid #e5e7eb", padding: "4px 6px" }}
-              level={3}
-            >
-              17
-            </Title>
-          </Flex>
-        </Flex>
+  <Image preview={false} src={logo} height={50} className="ml-1"></Image>
+  <Flex vertical style={{ marginTop: "0px" }}>
+    <Title level={2} style={{ textAlign: "center", fontSize: "1rem", marginTop: "0px" }}>
+      SHINEI GEOTECHNIQUE (M)SDN. BHD
+    </Title>
+    <Title level={2} style={{ textAlign: "center", fontSize: "1rem", marginTop: "0px"}}>
+      MICROPILE BORELOG
+    </Title>
+  </Flex>
+  <Flex style={{ marginBottom: "-15px" }} align="end">
+    <Title
+      style={{
+        border: "2px solid #e5e7eb",
+        padding: "2px 4px",
+        fontSize: "1rem",
+        marginRight: "5px",
+      }}
+      level={3}
+    >
+      Log No.
+    </Title>
+    <Title
+      style={{
+        border: "2px solid #e5e7eb",
+        padding: "2px 4px",
+        fontSize: "1rem",
+      }}
+      level={3}
+    >
+      17
+    </Title>
+  </Flex>
+</Flex>
+
         <div className="grid grid-cols-10 ">
           <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Project</p>
           <p className="col-span-7 border-2  pl-[4px] sm:p-[2px]">
@@ -75,7 +77,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] ">
             Hong Drill
           </p>
-          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Depth (m)</p>
+          <p className="col-span-1 border-2  pl-[4px] sm:p-[2px] ">Depth(m)</p>
           <p className="col-span-4 border-2  pl-[4px] sm:p-[2px] text-center">
             Description
           </p>
@@ -295,14 +297,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
               />
             </div>
-            <div className="col-span-5 grid grid-cols-5">
-              <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]"></p>
 
-              <input
-                type="text"
-                className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
-              />
-            </div>
             <div className="col-span-5 grid grid-cols-5">
               <p className="col-span-3 border-2   text-center pl-[4px] sm:p-[2px]"></p>
 
@@ -316,6 +311,30 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
                 Remarks
               </p>
             </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px] h-[80px]">
+
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <div className="col-span-5 border-2 pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Record by SHINEL's representative:</p>
+                <p className="self-end">Name:</p>
+              </div>
+            </div>
+
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2 pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Checked and Verified by Client's Rep:</p>
+                <p className="self-end">Name:</p>
+              </p>
+            </div>
+            <div className="col-span-5 grid grid-cols-5">
+              <p className="col-span-5 border-2  pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">
+                <p>Checked and Verified by Engineer's Rep:</p>
+                <p className="self-end">Name:</p>
+              </p>
+            </div>
           </div>
 
           <div className="col-span-5 grid grid-cols-5 border-[2px] border-solid border-[#e5e7eb]">
@@ -323,62 +342,61 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
             <div className="col-span-4 border-[2px] border-solid border-[#e5e7eb]">
               {this.props.data.length
                 ? this.props.data.map((item, index, array) => {
-                    const deepest = array[array.length - 1].depth;
-                    const deep =
-                      index > 0
-                        ? array[index].depth - array[index - 1].depth
-                        : array[index].depth;
-                    const heightPercent = (deep * 100) / deepest;
-                    const isLastItem = index === array.length - 1;
-                    const isFirstItem = index === 0;
-                    return (
-                      <div
-                        key={index}
-                        className={`w-full ${
-                          isLastItem ? "border-b-0" : "border-b-2"
+                  const deepest = array[array.length - 1].depth;
+                  const deep =
+                    index > 0
+                      ? array[index].depth - array[index - 1].depth
+                      : array[index].depth;
+                  const heightPercent = (deep * 100) / deepest;
+                  const isLastItem = index === array.length - 1;
+                  const isFirstItem = index === 0;
+                  return (
+                    <div
+                      key={index}
+                      className={`w-full ${isLastItem ? "border-b-0" : "border-b-2"
                         }  border-solid border-[#ccc] relative`}
-                        style={{ height: `${heightPercent}%` }}
+                      style={{ height: `${heightPercent}%` }}
+                    >
+                      <Title
+                        level={2}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                        }}
                       >
-                        <Title
-                          level={2}
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                          }}
-                        >
-                          {item.description}
-                        </Title>
-                        <Title
-                          level={3}
-                          className={`absolute ${
-                            isLastItem ? "bottom-0" : isFirstItem ? "top-0" : ""
+                        {item.description}
+                      </Title>
+                      <Title
+                        level={3}
+                        className={`absolute ${isLastItem ? "bottom-0" : isFirstItem ? "top-0" : ""
                           } left-[50%] translate-x-[-50%]`}
-                          style={{ margin: "0", fontWeight: "600" }}
-                        >
-                          {isLastItem
-                            ? "End of BoreHole"
-                            : isFirstItem
+                        style={{ margin: "0", fontWeight: "600" }}
+                      >
+                        {isLastItem
+                          ? "End of BoreHole"
+                          : isFirstItem
                             ? "Top of Borehole"
                             : ""}
-                        </Title>
-                        <div
-                          className={`absolute left-[-40px] bottom-[-2px] w-[40px] ${
-                            isLastItem ? "h-0" : "h-[2px]"
+                      </Title>
+                      <div
+                        className={`absolute left-[-40px] bottom-[-2px] w-[40px] ${isLastItem ? "h-0" : "h-[2px]"
                           } bg-[#ccc]`}
-                        >
-                          <div className="absolute top-[-16px] right-2 text-[16px] text-nowrap ">
-                            {item.depth} m
-                          </div>
+                      >
+                        <div className="absolute top-[-16px] right-2 text-[16px] text-nowrap ">
+                          {item.depth} m
                         </div>
                       </div>
-                    );
-                  })
+                    </div>
+                  );
+                })
                 : ""}
             </div>
           </div>
+
         </div>
+
       </div>
     );
   }

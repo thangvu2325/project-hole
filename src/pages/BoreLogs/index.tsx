@@ -1,26 +1,22 @@
 import { Button } from "antd";
 import { FunctionComponent, useCallback, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
-import DocumentExportPDF from "./DocumentExportPDF";
 import Title from "antd/es/typography/Title";
-import { IconChevronDown } from "@tabler/icons-react";
 import EditableTableForm from "./EditableTableForm";
-
+import {useNavigate} from "react-router-dom";
 interface BoreLogProps {}
 export type dataType = {
   depth: number;
   description: string;
 };
+
+
 const BoreLog: FunctionComponent<BoreLogProps> = () => {
   const [data, setData] = useState<dataType[]>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const componentRef = useRef<any>(null);
   const refDiv = useRef<HTMLDivElement>(null);
-  const handleToggleShowSearchBox = () => {
-    if (refDiv.current) {
-      refDiv.current.classList.toggle("h-260");
-    }
-  };
+  const navigate = useNavigate();
   const handleChangeTable = useCallback((value: dataType[]) => {
     setData(value);
   }, []);
@@ -60,14 +56,16 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
           <Title
             level={3}
             className="p-4 flex items-center outline-none font-semibold cursor-pointer select-none"
-            onClick={handleToggleShowSearchBox}
+            onClick={() => {
+              navigate(location.pathname + "/" + "preview");
+            }}
           >
-            <IconChevronDown></IconChevronDown>Preview PDF
+            Preview PDF
           </Title>
-          <DocumentExportPDF
+          {/* <DocumentExportPDF
             ref={componentRef}
             data={data ?? []}
-          ></DocumentExportPDF>
+          ></DocumentExportPDF> */}
         </div>
       </div>
     </div>

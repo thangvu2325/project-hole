@@ -9,6 +9,7 @@ import PilePlanPage from "../pages/PilePlan";
 import BoreLog from "../pages/BoreLogs";
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
+import PreviewPage from "../pages/Preview";
 // const Home = lazy(() => import("../pages/Home"));
 // const PilePlan = lazy(() => import("../pages/PilePlan"));
 // const boreLosg = lazy(() => import("../pages/BoreLogs"));
@@ -22,6 +23,7 @@ const publicRoutes: Array<RouteType> = [
   { path: routes.homepage, component: Home },
   { path: routes.project, component: ProjectPage },
   { path: routes.pilePlan, component: PilePlanPage },
+  { path: "/projects/:projectId/pilePlan/:pileId/preview", component: PreviewPage },
   { path: routes.boreLosg, component: BoreLog },
   { path: routes.profile, component: ProfilePage },
   { path: routes.settings, component: SettingsPage },
