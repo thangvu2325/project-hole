@@ -4,7 +4,7 @@ import Column from "antd/es/table/Column";
 import { FunctionComponent } from "react";
 import { deepType } from "../../types";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../redux/hook";
 import { formBorelogSelector } from "../../redux/selector";
 
@@ -15,6 +15,7 @@ interface EditableTableFormProps {
 const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
   handleChangeTable,
 }) => {
+  const params = useParams();
   const navigate = useNavigate();
   const onFinish = (values: { data: deepType[] }) => {
     handleChangeTable(
@@ -24,7 +25,9 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
         .sort((a, b) => a.depth - b.depth)
     );
   };
-  const deep = useAppSelector(formBorelogSelector)?.data?.deep;
+  const deep = useAppSelector(formBorelogSelector)?.data?.find(
+    (form) => form.pileId === params.pileId
+  )?.formData?.deep;
   const defaultData: deepType[] = [
     { depth: 0, description: "Top of Borehole" },
     ...(deep ? deep : []),

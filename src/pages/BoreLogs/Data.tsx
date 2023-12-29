@@ -24,13 +24,16 @@ function Data() {
   const projectFounded = useAppSelector(projectsSelector).data.find(
     (project) => project.projectId === pileFouded?.projectId
   );
-  const formDataBoreLogs = useAppSelector(formBorelogSelector).data;
-  const [formData, setFormData] =
-    useState<FormBorelogDataType>(formDataBoreLogs);
+  const formDataBoreLogs = useAppSelector(formBorelogSelector).data.find(
+    (form) => form.pileId === params.pileId
+  )?.formData;
+  const [formData, setFormData] = useState<FormBorelogDataType>(
+    formDataBoreLogs ? formDataBoreLogs : {}
+  );
   const dispatch = useAppDispatch();
   const handleClick = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    dispatch(setState(formData));
+    dispatch(setState({ ...formData, pileNo: params.pileId }));
     navigate(location.pathname + "/example");
   };
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,10 +56,18 @@ function Data() {
         ).filter((item) => item.length > 0);
         const dataWillSet: FormBorelogDataType = {};
         dataReaded.forEach((element, findex) => {
+          console.log(element);
           element.forEach((item, index) => {
+            if (item == "Total weathered Rock, Boulders,\nCavity (m)") {
+              console.log(item);
+            }
+            if (item.toString().trim().startsWith("Total weathered")) {
+              dataWillSet.totalWeathered = dataReaded[findex + 1][index];
+            }
+
             switch (item.toString().trim()) {
               case "Pile No":
-                dataWillSet.pileNo = dataReaded[findex + 1][index];
+                dataWillSet.pileNo = params.pileId;
                 break;
               case "Boring Rig":
                 dataWillSet.boringRig = dataReaded[findex + 1][index];
@@ -148,10 +159,7 @@ function Data() {
               case "Soil Drilling":
                 dataWillSet.soilDrilling = dataReaded[findex + 1][index];
                 break;
-              case "Total weathered Rock, Boulders,\r\nCavity (m)":
-                dataWillSet.totalWeathered = dataReaded[findex + 1][index];
 
-                break;
               case "Rock Socket Length (m)":
                 dataWillSet.rockSocket = dataReaded[findex + 1][index];
                 break;
@@ -173,7 +181,7 @@ function Data() {
             }
           });
         });
-        dispatch(setState(dataWillSet));
+        dispatch(setState({ ...dataWillSet, pileNo: params.pileId }));
         setFormData((prev) => ({ ...prev, ...dataWillSet }));
       };
 
@@ -188,9 +196,11 @@ function Data() {
             .toISOString()
             .split("T")[0]
         : "",
+      pileNo: params?.pileId,
     }));
     dispatch(
       setState({
+        pileNo: params?.pileId,
         projectDate: projectFounded
           ? new Date(
               projectFounded?.project_date.split("/").reverse().join("/")

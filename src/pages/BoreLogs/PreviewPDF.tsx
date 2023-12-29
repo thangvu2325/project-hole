@@ -5,7 +5,7 @@ import DocumentExportPDF from "../BoreLogs/DocumentExportPDF";
 import { useAppSelector } from "../../redux/hook";
 import { formBorelogSelector } from "../../redux/selector";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface PreviewPageProps {}
 export type dataType = {
@@ -15,7 +15,10 @@ export type dataType = {
 const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const componentRef = useRef<any>(null);
-  const formData = useAppSelector(formBorelogSelector).data;
+  const params = useParams();
+  const formData = useAppSelector(formBorelogSelector)?.data?.find(
+    (form) => form.pileId === params.pileId
+  )?.formData;
   const navigate = useNavigate();
   const handlePrint = () => {
     if (componentRef.current) {
