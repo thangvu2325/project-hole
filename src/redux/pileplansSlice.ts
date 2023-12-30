@@ -50,7 +50,7 @@ const alphabetArray: Array<string> = [];
 for (let i = 97; i <= 122; i++) {
   alphabetArray.push(String.fromCharCode(i).toUpperCase());
 }
-let index = 2;
+let index = 1;
 export const pileplansSlice = createSlice({
   name: "pileplans",
   // `createSlice` will infer the state type from the `initialState` argument
@@ -64,14 +64,23 @@ export const pileplansSlice = createSlice({
     },
     // Math.random().toString(36).slice(-8)
     addPilePlant(state, action: PayloadAction<PilePlanType>) {
+      index++;
       state.data.push({
         ...action.payload,
         pileId: `MP${action.payload.projectId}${alphabetArray[index]}`,
       });
-      index++;
     },
     addPilePlantExcel(state, action: PayloadAction<PilePlanType[]>) {
-      state.data = [...state.data, ...action.payload];
+      state.data = [
+        ...state.data,
+        ...action.payload.map((pile) => {
+          index++;
+          return {
+            ...pile,
+            pileId: `MP${pile.projectId}${alphabetArray[index]}`,
+          };
+        }),
+      ];
     },
   },
 });

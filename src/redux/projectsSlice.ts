@@ -53,7 +53,13 @@ export const projectsSlice = createSlice({
       id++;
     },
     addProjectPlantExcel(state, action: PayloadAction<ProjectType[]>) {
-      state.data = [...state.data, ...action.payload];
+      state.data = [
+        ...state.data,
+        ...action.payload.map((project) => ({
+          ...project,
+          projectId: id.toString(),
+        })),
+      ];
     },
   },
 });

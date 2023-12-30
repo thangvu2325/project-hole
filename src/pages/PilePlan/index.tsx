@@ -43,9 +43,9 @@ import {
   editPilePlantFilter,
 } from "../../redux/pileplansSlice";
 import ModalAdd from "../../components/ModalAdd";
-import { PilePlanType } from "../../types";
 import ImportButtonExcel from "../../components/ImportButtonExcel";
 import ExportButtonExcel from "../../components/ExportButtonExcel";
+import { PilePlanType } from "../../types";
 
 interface PilePlanPageProps {}
 interface DataType {
@@ -112,7 +112,6 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
     (pilePlan) => pilePlan.projectId === params.projectId
   );
 
-  const [importedData, setImportedData] = useState<Array<PilePlanType>>([]);
   // Lấy mảng keys từ hàng đầu tiên
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,8 +128,14 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
       return obj;
     });
 
-    dispatch(addPilePlantExcel(resultArray));
-    setImportedData(resultArray);
+    dispatch(
+      addPilePlantExcel(
+        resultArray.map((pile: PilePlanType) => ({
+          ...pile,
+          projectId: params.projectId,
+        }))
+      )
+    );
   };
   const [open, setOpen] = useState<boolean>(false);
   const projectFounded = useAppSelector(projectsSelector).data.find(
@@ -431,7 +436,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         >
           <Table
             columns={columns}
-            dataSource={[...pilePlanData, ...importedData].map((pilePlan) => {
+            dataSource={pilePlanData.map((pilePlan) => {
               return {
                 ...pilePlan,
                 key: pilePlan.pileId,
