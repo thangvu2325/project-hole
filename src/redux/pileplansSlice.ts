@@ -70,9 +70,13 @@ export const pileplansSlice = createSlice({
       });
       index++;
     },
+    addPilePlantExcel(state, action: PayloadAction<PilePlanType[]>) {
+      state.data = [...state.data, ...action.payload];
+    },
   },
 });
 
-export const { editPilePlantFilter, addPilePlant } = pileplansSlice.actions;
+export const { editPilePlantFilter, addPilePlant, addPilePlantExcel } =
+  pileplansSlice.actions;
 
 export default pileplansSlice.reducer;

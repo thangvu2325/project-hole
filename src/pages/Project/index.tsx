@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Col,
@@ -23,9 +24,15 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { projectsRemainingSelector } from "../../redux/selector";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { addProject, editFilter } from "../../redux/projectsSlice";
+import {
+  addProject,
+  addProjectPlantExcel,
+  editFilter,
+} from "../../redux/projectsSlice";
 import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import ModalAdd from "../../components/ModalAdd";
+import ImportButtonExcel from "../../components/ImportButtonExcel";
+import ExportButtonExcel from "../../components/ExportButtonExcel";
 
 interface ProjectPageProps {}
 interface DataType {
@@ -74,28 +81,25 @@ type FieldType = {
   project_status?: string;
 };
 const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
-  const tableData = useAppSelector(projectsRemainingSelector)?.map(
-    (project, index) => {
-      return {
-        ...project,
-        key: (index + 1).toString(),
-        detail: (
-          <Title
-            level={3}
-            className="cursor-pointer"
-            style={{ fontWeight: "400" }}
-            onClick={() => {
-              navigate(
-                location.pathname + "/" + project.projectId + "/pileplan"
-              );
-            }}
-          >
-            Detail
-          </Title>
-        ),
-      };
-    }
-  );
+  const projectData = useAppSelector(projectsRemainingSelector);
+  const tableData = projectData?.map((project, index) => {
+    return {
+      ...project,
+      key: (index + 1).toString(),
+      detail: (
+        <Title
+          level={3}
+          className="cursor-pointer"
+          style={{ fontWeight: "400" }}
+          onClick={() => {
+            navigate(location.pathname + "/" + project.projectId + "/pileplan");
+          }}
+        >
+          Detail
+        </Title>
+      ),
+    };
+  });
   const [open, setOpen] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [api, contextHolder] = notification.useNotification();
@@ -106,6 +110,21 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
     if (refDiv.current) {
       refDiv.current.classList.toggle("h-42");
     }
+  };
+  const handleDataImport = (data: Array<Array<string>>) => {
+    const keys = data[0];
+
+    // Biến đổi mảng theo keys
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const resultArray: any = data.slice(1).map((row) => {
+      const obj: Record<string, string> = {};
+      keys.forEach((key, index) => {
+        obj[key] = row[index];
+      });
+      return obj;
+    });
+
+    dispatch(addProjectPlantExcel(resultArray));
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = useCallback(async (values: any) => {
@@ -163,9 +182,15 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
       {contextHolder}
       <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md">
         <Flex justify="space-between">
-          <Title level={1} className="ml-4 mt-4">
-            Micropile Borelog
-          </Title>
+          <Flex vertical>
+            <Title level={1} className="ml-4 mt-4">
+              Micropile Borelog
+            </Title>
+            <Flex className="mt-2" align="center">
+              <ImportButtonExcel onDataImport={handleDataImport} />
+              <ExportButtonExcel data={projectData} fileName="exported_data" />
+            </Flex>
+          </Flex>
           <Button
             style={{ background: "#6366f1", color: "#fff" }}
             className="flex items-center mr-4 mt-4"
@@ -249,7 +274,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                       }
                       name="projectId"
                     >
-                      <Input placeholder="Nhập ProjectId"></Input>
+                      <Input placeholder="ProjectId"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -269,7 +294,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
                       }
                       name="project_name"
                     >
-                      <Input placeholder="Nhập Project Name"></Input>
+                      <Input placeholder="Project Name"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -372,12 +397,12 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Project!",
+                message: "Project Name!",
               },
             ]}
           >
             <Input
-              placeholder="Nhập Project Name"
+              placeholder="Project Name"
               style={{ width: "190px" }}
             ></Input>
           </Form.Item>
@@ -399,7 +424,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn status!",
+                message: "please select a status!",
               },
             ]}
           >
@@ -428,7 +453,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn ngày!",
+                message: "please pick a day!",
               },
             ]}
             name="project_date"

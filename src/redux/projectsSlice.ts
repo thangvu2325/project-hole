@@ -52,9 +52,13 @@ export const projectsSlice = createSlice({
       state.data.push({ ...action.payload, projectId: id.toString() });
       id++;
     },
+    addProjectPlantExcel(state, action: PayloadAction<ProjectType[]>) {
+      state.data = [...state.data, ...action.payload];
+    },
   },
 });
 
-export const { editFilter, addProject } = projectsSlice.actions;
+export const { editFilter, addProject, addProjectPlantExcel } =
+  projectsSlice.actions;
 
 export default projectsSlice.reducer;

@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import Title from "antd/es/typography/Title";
+
 import {
   FunctionComponent,
   useCallback,
@@ -36,8 +37,15 @@ import {
   IconChevronLeft,
   IconPlus,
 } from "@tabler/icons-react";
-import { addPilePlant, editPilePlantFilter } from "../../redux/pileplansSlice";
+import {
+  addPilePlant,
+  addPilePlantExcel,
+  editPilePlantFilter,
+} from "../../redux/pileplansSlice";
 import ModalAdd from "../../components/ModalAdd";
+import { PilePlanType } from "../../types";
+import ImportButtonExcel from "../../components/ImportButtonExcel";
+import ExportButtonExcel from "../../components/ExportButtonExcel";
 
 interface PilePlanPageProps {}
 interface DataType {
@@ -95,38 +103,44 @@ const columns: ColumnsType<DataType> | null = [
     dataIndex: "detail",
   },
 ];
+
 const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
-  const pilePlans = useAppSelector(pilePlansRemainingSelector)
-    .filter((pilePlan) => pilePlan.projectId === params.projectId)
-    .map((pile) => {
-      return {
-        ...pile,
-        detail: (
-          <Title
-            level={3}
-            className="cursor-pointer"
-            style={{ fontWeight: "400" }}
-            onClick={() => {
-              navigate(location.pathname + "/" + pile.pileId);
-            }}
-          >
-            Detail
-          </Title>
-        ),
-      };
+  const pilePlanData = useAppSelector(pilePlansRemainingSelector).filter(
+    (pilePlan) => pilePlan.projectId === params.projectId
+  );
+
+  const [importedData, setImportedData] = useState<Array<PilePlanType>>([]);
+  // Lấy mảng keys từ hàng đầu tiên
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDataImport = (data: Array<Array<string>>) => {
+    const keys = data[0];
+
+    // Biến đổi mảng theo keys
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const resultArray: any = data.slice(1).map((row) => {
+      const obj: Record<string, string> = {};
+      keys.forEach((key, index) => {
+        obj[key] = row[index];
+      });
+      return obj;
     });
+
+    dispatch(addPilePlantExcel(resultArray));
+    setImportedData(resultArray);
+  };
   const [open, setOpen] = useState<boolean>(false);
   const projectFounded = useAppSelector(projectsSelector).data.find(
     (project) => project.projectId === params.projectId
   );
   useEffect(() => {
-    if (!pilePlans) {
+    if (!params.projectId) {
       navigate("/");
     }
-  }, [pilePlans]);
+  }, [params]);
   const [searchParams, setSearchParams] = useSearchParams();
   const refDiv = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -190,9 +204,16 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
       {contextHolder}
       <div className="bg-[#fff] border-[0.8px] border-solid border-[#ccc] rounded-md pb-3">
         <Flex justify="space-between">
-          <Title level={1} className="ml-4 mt-4">
-            Pile Manager
-          </Title>
+          <Flex vertical>
+            <Title level={1} className="ml-4 mt-4">
+              Pile Manager
+            </Title>
+            <Flex className="mt-2" align="center">
+              <ImportButtonExcel onDataImport={handleDataImport} />
+
+              <ExportButtonExcel data={pilePlanData} fileName="exported_data" />
+            </Flex>
+          </Flex>
           <Button
             style={{ background: "#6366f1", color: "#fff" }}
             className="flex items-center mr-4 mt-4"
@@ -278,7 +299,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                       }
                       name="pileId"
                     >
-                      <Input placeholder="Nhập PileId"></Input>
+                      <Input placeholder="PileId"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -298,7 +319,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                       }
                       name="pile_location"
                     >
-                      <Input placeholder="Nhập Pile Location"></Input>
+                      <Input placeholder="Pile Location"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -320,7 +341,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                       }
                       name="pile_diameter"
                     >
-                      <Input placeholder="Nhập Pile Diameter"></Input>
+                      <Input placeholder="Pile Diameter"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -340,7 +361,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                       }
                       name="pile_raked"
                     >
-                      <Input placeholder="Nhập Pike Raked"></Input>
+                      <Input placeholder="Pike Raked"></Input>
                     </Form.Item>
                   </Space>
                 </Col>
@@ -410,10 +431,22 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         >
           <Table
             columns={columns}
-            dataSource={pilePlans.map((pilePlan) => {
+            dataSource={[...pilePlanData, ...importedData].map((pilePlan) => {
               return {
                 ...pilePlan,
                 key: pilePlan.pileId,
+                detail: (
+                  <Title
+                    level={3}
+                    className="cursor-pointer"
+                    style={{ fontWeight: "400" }}
+                    onClick={() => {
+                      navigate(location.pathname + "/" + pilePlan.pileId);
+                    }}
+                  >
+                    Detail
+                  </Title>
+                ),
               };
             })}
             pagination={{ pageSize: 4 }}
