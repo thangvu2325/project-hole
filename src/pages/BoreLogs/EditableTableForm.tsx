@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Input, Button, Table, Flex } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Column from "antd/es/table/Column";
@@ -17,6 +18,7 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
 }) => {
   const params = useParams();
   const navigate = useNavigate();
+
   const onFinish = (values: { data: deepType[] }) => {
     handleChangeTable(
       values.data
@@ -25,15 +27,21 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
         .sort((a, b) => a.depth - b.depth)
     );
   };
+
   const deep = useAppSelector(formBorelogSelector)?.data?.find(
     (form) => form.pileId === params.pileId
   )?.formData?.deep;
+
   const defaultData: deepType[] = [
     { depth: 0, description: "Top of Borehole" },
     ...(deep ? deep : []),
   ];
+
+  const [form] = Form.useForm();
+
   return (
     <Form
+      form={form}
       name="dynamic_form_item"
       onFinish={onFinish}
       initialValues={{
@@ -80,6 +88,28 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
                   name={[index, "depth"]}
                   style={{ marginBottom: "0" }}
                   initialValue={index === 0 ? defaultData[0].depth : undefined}
+                  rules={[
+                    {
+                      validator: (_rule, value) => {
+                        return new Promise<void>((resolve, reject) => {
+                          const reg = /^[0-9]+$/;
+                          const data = form.getFieldValue("data");
+                          const isDuplicate = data.some(
+                            (item: deepType, i: number) =>
+                              i !== index && item.depth === value
+                          );
+
+                          if (!reg.test(value)) {
+                            reject("Depth must be a valid number.");
+                          } else if (isDuplicate) {
+                            reject("Duplicate 'Depth' value is not allowed.");
+                          } else {
+                            resolve();
+                          }
+                        });
+                      },
+                    },
+                  ]}
                 >
                   <Input
                     placeholder="depth"
@@ -132,4 +162,5 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
     </Form>
   );
 };
+
 export default EditableTableForm;

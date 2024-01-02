@@ -476,7 +476,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
             name="project_date"
             style={{ marginBottom: "0" }}
           >
-            <DatePicker placeholder="Chọn ngày" style={{ width: "190px" }} />
+            <DatePicker placeholder="select a day" style={{ width: "190px" }} />
           </Form.Item>
         </Space>
       </ModalAdd>

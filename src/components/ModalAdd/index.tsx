@@ -48,7 +48,7 @@ const ModalAdd: FunctionComponent<ModalAddProps> = ({
               setOpen(false);
             }}
           >
-            Quay Lại
+            Back
           </Button>
           <Button
             htmlType="submit"
@@ -56,7 +56,7 @@ const ModalAdd: FunctionComponent<ModalAddProps> = ({
             type="primary"
             style={{ background: token.colorPrimary, marginLeft: "16px" }}
           >
-            Thêm
+            Add
           </Button>
         </div>
       </Form>

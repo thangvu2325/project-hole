@@ -51,7 +51,7 @@ const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
           content={() => componentRef.current}
         />
       </Flex>
-      <div className="w-[640px] my-9 mx-auto  border-[0.8px] border-solid border-[#e5e7eb] shadow">
+      <div className="w-[640px] my-9 mx-auto border-[0.8px] border-solid border-[#e5e7eb] shadow">
         <DocumentExportPDF
           ref={componentRef}
           formData={formData}
