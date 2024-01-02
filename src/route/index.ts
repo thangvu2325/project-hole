@@ -11,7 +11,6 @@ import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
 import DataPage from "../pages/BoreLogs/Data";
 import PreviewPage from "../pages/BoreLogs/PreviewPDF";
-import { Fragment } from "react";
 // const Home = lazy(() => import("../pages/Home"));
 // const PilePlan = lazy(() => import("../pages/PilePlan"));
 // const boreLosg = lazy(() => import("../pages/BoreLogs"));
@@ -29,7 +28,6 @@ const publicRoutes: Array<RouteType> = [
   {
     path: routes.previewPdf,
     component: PreviewPage,
-    layout: Fragment,
   },
   { path: routes.profile, component: ProfilePage },
   { path: routes.settings, component: SettingsPage },

@@ -1,7 +1,7 @@
 /* eslint-disable no-unexpected-multiline */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from "antd";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Button, Flex } from "antd";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { setState } from "../../redux/formBorelogSlice";
 import { FormBorelogDataType } from "../../types";
@@ -11,8 +11,13 @@ import {
   pileplansSelector,
   projectsSelector,
 } from "../../redux/selector";
-import { IconChevronLeft } from "@tabler/icons-react";
+import {
+  IconChevronLeft,
+  IconFileExport,
+  IconFileImport,
+} from "@tabler/icons-react";
 import * as XLSX from "xlsx";
+import Title from "antd/es/typography/Title";
 
 function Data() {
   const navigate = useNavigate();
@@ -35,6 +40,12 @@ function Data() {
     event.preventDefault();
     dispatch(setState({ ...formData, pileNo: params.pileId }));
     navigate(location.pathname + "/example");
+  };
+  const fileInputRef: any = useRef(null);
+
+  const handleButtonClick = () => {
+    // Mở cửa sổ chọn tệp khi nút được nhấp
+    fileInputRef?.current?.click();
   };
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -223,14 +234,51 @@ function Data() {
     >
       <div className="bg-[#fff] p-4 rounded-md shadow-md">
         <div className="container relative">
-          <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
-          <a
-            id="downloadLink"
-            href="https://drive.google.com/uc?export=download&id=1UOgWTLj6GSqhGtn8lyoF032xsaIYPCAp"
-            download="data.xlsx"
-          >
-            <Button type="primary">File Excel mẫu để import</Button>
-          </a>
+          <Flex align="center">
+            <Button type="primary" className="ml-4" onClick={handleButtonClick}>
+              <Flex align="center">
+                <IconFileImport width={16} height={16}></IconFileImport>
+                <Title
+                  level={3}
+                  style={{
+                    marginBottom: "0",
+                    marginLeft: "8px",
+                    color: "#fff",
+                  }}
+                >
+                  Import
+                </Title>
+              </Flex>
+            </Button>
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileUpload}
+            />
+            <a
+              id="downloadLink"
+              href="https://drive.google.com/uc?export=download&id=1UOgWTLj6GSqhGtn8lyoF032xsaIYPCAp"
+              download="data.xlsx"
+            >
+              <Button type="primary" className="ml-4">
+                <Flex align="center">
+                  <IconFileExport width={16} height={16}></IconFileExport>{" "}
+                  <Title
+                    level={3}
+                    style={{
+                      marginBottom: "0",
+                      marginLeft: "8px",
+                      color: "#fff",
+                    }}
+                  >
+                    Sample File to Import
+                  </Title>
+                </Flex>
+              </Button>
+            </a>
+          </Flex>
           <form className="row m-[20px]" onSubmit={handleClick}>
             <div className="col-6 mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -657,7 +705,7 @@ function Data() {
               htmlType="submit"
               className="btn btn-primary flex items-center justify-center w-[600px] h-8 mx-auto"
             >
-              Save
+              Next
             </Button>
           </form>
           <Button

@@ -32,7 +32,6 @@ const EditableTableForm: FunctionComponent<EditableTableFormProps> = ({
     { depth: 0, description: "Top of Borehole" },
     ...(deep ? deep : []),
   ];
-  console.log(defaultData);
   return (
     <Form
       name="dynamic_form_item"

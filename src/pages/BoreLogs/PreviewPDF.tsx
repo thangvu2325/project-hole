@@ -28,7 +28,7 @@ const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
   };
 
   return (
-    <div className="pb-4">
+    <div className="pb-4 px-8">
       <Flex align="center">
         <Button
           className="bg-gray-600 mr-2 w-20 flex justify-center items-center ml-4"
@@ -51,10 +51,12 @@ const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
           content={() => componentRef.current}
         />
       </Flex>
-      <DocumentExportPDF
-        ref={componentRef}
-        formData={formData}
-      ></DocumentExportPDF>
+      <div className="w-[640px] my-9 mx-auto  border-[0.8px] border-solid border-[#e5e7eb] shadow">
+        <DocumentExportPDF
+          ref={componentRef}
+          formData={formData}
+        ></DocumentExportPDF>
+      </div>
     </div>
   );
 };

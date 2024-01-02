@@ -14,7 +14,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
   formData = this.props.formData;
   render() {
     return (
-      <div className="mx-[80px] mt-[30px] text-[12px]">
+      <div className="mx-auto text-[12px] p-4  ">
         <Flex justify="space-between" align="end" className="mb-3">
           <Image
             preview={false}
@@ -343,7 +343,7 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               </p>
             </div>
             <div className="col-span-5 grid grid-cols-5">
-              <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px] h-[80px]"></p>
+              <p className="col-span-5 border-2   text-center pl-[4px] sm:p-[2px] h-[120px]"></p>
             </div>
             <div className="col-span-5 grid grid-cols-5">
               <div className="col-span-5 border-2 pl-[4px] sm:p-[2px] h-[60px] grid grid-rows-[1fr, auto]">

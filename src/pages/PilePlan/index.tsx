@@ -9,6 +9,7 @@ import {
   Select,
   Space,
   Table,
+  Tag,
   notification,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -35,6 +36,7 @@ import {
 import {
   IconChevronDown,
   IconChevronLeft,
+  IconChevronRight,
   IconPlus,
 } from "@tabler/icons-react";
 import {
@@ -441,16 +443,29 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
                 ...pilePlan,
                 key: pilePlan.pileId,
                 detail: (
-                  <Title
-                    level={3}
-                    className="cursor-pointer"
-                    style={{ fontWeight: "400" }}
-                    onClick={() => {
-                      navigate(location.pathname + "/" + pilePlan.pileId);
-                    }}
-                  >
-                    Detail
-                  </Title>
+                  <Tag color="geekblue">
+                    <Title
+                      level={3}
+                      className="hover:text-blue-400 cursor-pointer"
+                      style={{
+                        fontWeight: "500",
+                        margin: "0",
+                        padding: "4px 0px",
+                        width: "fit-content",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                      onClick={() => {
+                        navigate(location.pathname + "/" + pilePlan.pileId);
+                      }}
+                    >
+                      Detail
+                      <IconChevronRight
+                        width={16}
+                        height={16}
+                      ></IconChevronRight>
+                    </Title>
+                  </Tag>
                 ),
               };
             })}

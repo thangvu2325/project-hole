@@ -10,6 +10,7 @@ import {
   Select,
   Space,
   Table,
+  Tag,
   notification,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -29,7 +30,11 @@ import {
   addProjectPlantExcel,
   editFilter,
 } from "../../redux/projectsSlice";
-import { IconChevronDown, IconPlus } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronRight,
+  IconPlus,
+} from "@tabler/icons-react";
 import ModalAdd from "../../components/ModalAdd";
 import ImportButtonExcel from "../../components/ImportButtonExcel";
 import ExportButtonExcel from "../../components/ExportButtonExcel";
@@ -87,16 +92,28 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
       ...project,
       key: (index + 1).toString(),
       detail: (
-        <Title
-          level={3}
-          className="cursor-pointer"
-          style={{ fontWeight: "400" }}
-          onClick={() => {
-            navigate(location.pathname + "/" + project.projectId + "/pileplan");
-          }}
-        >
-          Detail
-        </Title>
+        <Tag color="geekblue">
+          <Title
+            level={3}
+            style={{
+              fontWeight: "500",
+              margin: "0",
+              padding: "4px 0px",
+              width: "fit-content",
+              display: "flex",
+              alignItems: "center",
+            }}
+            className="hover:text-blue-400 cursor-pointer"
+            onClick={() => {
+              navigate(
+                location.pathname + "/" + project.projectId + "/pileplan"
+              );
+            }}
+          >
+            Detail
+            <IconChevronRight width={16} height={16}></IconChevronRight>
+          </Title>
+        </Tag>
       ),
     };
   });

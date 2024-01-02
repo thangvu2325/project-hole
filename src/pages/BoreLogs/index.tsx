@@ -5,7 +5,7 @@ import EditableTableForm from "./EditableTableForm";
 import { useAppDispatch } from "../../redux/hook";
 import { deepType } from "../../types";
 import { setState } from "../../redux/formBorelogSlice";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { notification } from "antd";
 
 interface BoreLogProps {}
@@ -14,10 +14,11 @@ const BoreLog: FunctionComponent<BoreLogProps> = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const params = useParams();
   const [api, contextHolder] = notification.useNotification();
   const handleChangeTable = useCallback((value: deepType[]) => {
     try {
-      dispatch(setState({ deep: value }));
+      dispatch(setState({ deep: value, pileNo: params.pileId }));
       api["success"]({
         message: "Success!",
       });
