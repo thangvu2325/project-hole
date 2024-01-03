@@ -1,18 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Title from "antd/es/typography/Title";
-import { Component } from "react";
+import React, { Component } from "react";
 import logo from "../../assets/image/Micropile Borelogs.png";
 import { Flex, Image } from "antd";
 import { FormBorelogDataType } from "../../types";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setState } from "../../redux/formBorelogSlice";
 
 type DocumentExportPDFProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: React.MutableRefObject<any>;
   className?: string;
   formData?: FormBorelogDataType;
+  dispatch: Dispatch;
+  pileId: string;
 };
 export default class DocumentExportPDF extends Component<DocumentExportPDFProps> {
   formData = this.props.formData;
+  state: FormBorelogDataType = {};
+  updateState = (key: string, value: string) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
   render() {
+    console.log(this.state);
     return (
       <div className="mx-auto text-[12px] p-4  ">
         <Flex justify="space-between" align="end" className="mb-3">
@@ -57,7 +70,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <input
             className="col-span-1 border-2  pl-[4px] sm:p-[2px]"
             type="text"
-            value={this.formData?.projectDate ?? ""}
+            value={
+              this.state.projectDate
+                ? this.state.projectDate
+                : this.formData?.projectDate ?? ""
+            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              this.updateState("projectDate", e.target.value);
+              this.props.dispatch(
+                setState({
+                  pileNo: this.props.pileId,
+                  projectDate: e.target.value,
+                })
+              );
+            }}
           ></input>
         </div>
         <div className="grid grid-cols-10 ">
@@ -65,7 +91,19 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
           <input
             className="col-span-4 border-2  pl-[4px] sm:p-[2px]"
             type="text"
-            value={this.formData?.pileNo ?? ""}
+            value={
+              this.state.pileNo
+                ? this.state.pileNo
+                : this.formData?.pileNo ?? ""
+            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              this.updateState("pileNo", e.target.value);
+              this.props.dispatch(
+                setState({
+                  pileNo: e.target.value,
+                })
+              );
+            }}
           ></input>
           <p className="col-span-1 border-2  pl-[4px] sm:p-[2px]">Pile Dia</p>
           <p className="col-span-2 border-2  pl-[4px] sm:p-[2px]">200mm</p>
@@ -100,12 +138,38 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.boringStartDate ?? ""}
+                value={
+                  this.state.boringStartDate
+                    ? this.state.boringStartDate
+                    : this.formData?.boringStartDate ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("boringStartDate", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      boringStartDate: e.target.value,
+                    })
+                  );
+                }}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.boringStartTime ?? ""}
+                value={
+                  this.state.boringStartTime
+                    ? this.state.boringStartTime
+                    : this.formData?.boringStartTime ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("boringStartTime", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      boringStartTime: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -113,12 +177,38 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.boringEndDate ?? ""}
+                value={
+                  this.state.boringEndDate
+                    ? this.state.boringEndDate
+                    : this.formData?.boringEndDate ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("boringEndDate", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      boringEndDate: e.target.value,
+                    })
+                  );
+                }}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.boringEndTime ?? ""}
+                value={
+                  this.state.boringEndTime
+                    ? this.state.boringEndTime
+                    : this.formData?.boringEndTime ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("boringEndTime", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      boringEndTime: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -137,12 +227,38 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.groutingStartDate ?? ""}
+                value={
+                  this.state.groutingStartDate
+                    ? this.state.groutingStartDate
+                    : this.formData?.groutingStartDate ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("groutingStartDate", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      groutingStartDate: e.target.value,
+                    })
+                  );
+                }}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.groutingStartTime ?? ""}
+                value={
+                  this.state.groutingStartTime
+                    ? this.state.groutingStartTime
+                    : this.formData?.groutingStartTime ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("groutingStartTime", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      groutingStartTime: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -150,12 +266,38 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.groutingEndDate ?? ""}
+                value={
+                  this.state.groutingEndDate
+                    ? this.state.groutingEndDate
+                    : this.formData?.groutingEndDate ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("groutingEndDate", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      groutingEndDate: e.target.value,
+                    })
+                  );
+                }}
               />
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.groutingEndTime ?? ""}
+                value={
+                  this.state.groutingEndTime
+                    ? this.state.groutingEndTime
+                    : this.formData?.groutingEndTime ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("groutingEndTime", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      groutingEndTime: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -166,7 +308,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.platformLevel ?? ""}
+                value={
+                  this.state.platformLevel
+                    ? this.state.platformLevel
+                    : this.formData?.platformLevel ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("platformLevel", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      platformLevel: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -177,7 +332,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.topOfCasing ?? ""}
+                value={
+                  this.state.topOfCasing
+                    ? this.state.topOfCasing
+                    : this.formData?.topOfCasing ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("topOfCasing", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      topOfCasing: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -188,7 +356,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.cutOffLevel ?? ""}
+                value={
+                  this.state.cutOffLevel
+                    ? this.state.cutOffLevel
+                    : this.formData?.cutOffLevel ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("cutOffLevel", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      cutOffLevel: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -199,7 +380,18 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.toc ?? ""}
+                value={
+                  this.state.toc ? this.state.toc : this.formData?.toc ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("toc", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      toc: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -210,7 +402,18 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2   pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.toe ?? ""}
+                value={
+                  this.state.toe ? this.state.toe : this.formData?.toe ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("toe", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      toe: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -221,7 +424,18 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.ogl ?? ""}
+                value={
+                  this.state.ogl ? this.state.ogl : this.formData?.ogl ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("ogl", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      ogl: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -232,7 +446,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.pileLength ?? ""}
+                value={
+                  this.state.pileLength
+                    ? this.state.pileLength
+                    : this.formData?.pileLength ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("pileLength", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      pileLength: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -243,7 +470,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.soilDrilling ?? ""}
+                value={
+                  this.state.soilDrilling
+                    ? this.state.soilDrilling
+                    : this.formData?.soilDrilling ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("soilDrilling", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      soilDrilling: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -254,7 +494,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.totalWeathered ?? ""}
+                value={
+                  this.state.totalWeathered
+                    ? this.state.totalWeathered
+                    : this.formData?.totalWeathered ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("totalWeathered", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      totalWeathered: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -265,7 +518,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.rockSocket ?? ""}
+                value={
+                  this.state.rockSocket
+                    ? this.state.rockSocket
+                    : this.formData?.rockSocket ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("rockSocket", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      rockSocket: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -276,7 +542,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.groutLength ?? ""}
+                value={
+                  this.state.groutLength
+                    ? this.state.groutLength
+                    : this.formData?.groutLength ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("groutLength", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      groutLength: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -287,7 +566,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.ofBag ?? ""}
+                value={
+                  this.state.ofBag
+                    ? this.state.ofBag
+                    : this.formData?.ofBag ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("ofBag", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      ofBag: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -307,7 +599,18 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.api ?? ""}
+                value={
+                  this.state.api ? this.state.api : this.formData?.api ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("api", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      api: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">
@@ -318,7 +621,20 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <input
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
-                value={this.formData?.permanent ?? ""}
+                value={
+                  this.state.permanent
+                    ? this.state.permanent
+                    : this.formData?.permanent ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("permanent", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      permanent: e.target.value,
+                    })
+                  );
+                }}
               />
             </div>
             <div className="col-span-5 grid grid-cols-5">

@@ -2,7 +2,7 @@ import { FunctionComponent, useRef } from "react";
 import ReactToPrint from "react-to-print";
 import { Button, Flex } from "antd";
 import DocumentExportPDF from "../BoreLogs/DocumentExportPDF";
-import { useAppSelector } from "../../redux/hook";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import { formBorelogSelector } from "../../redux/selector";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -26,7 +26,7 @@ const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
       componentRef.current.onPrint();
     }
   };
-
+  const dispatch = useAppDispatch();
   return (
     <div className="pb-4 px-8">
       <Flex align="center">
@@ -55,6 +55,8 @@ const PreviewPage: FunctionComponent<PreviewPageProps> = () => {
         <DocumentExportPDF
           ref={componentRef}
           formData={formData}
+          dispatch={dispatch}
+          pileId={params?.pileId ?? ""}
         ></DocumentExportPDF>
       </div>
     </div>
