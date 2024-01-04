@@ -586,10 +586,24 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
               <p className="col-span-3 border-2   text-center pl-[4px] sm:p-[2px]">
                 API Pipe Size (mm)
               </p>
-
-              <p className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center">
-                88.9dia, 6.4thk
-              </p>
+              <input
+                type="text"
+                className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
+                value={
+                  this.state.apiPileSize
+                    ? this.state.apiPileSize
+                    : this.formData?.apiPileSize ?? ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  this.updateState("apiPileSize", e.target.value);
+                  this.props.dispatch(
+                    setState({
+                      pileNo: this.props.pileId,
+                      apiPileSize: e.target.value,
+                    })
+                  );
+                }}
+              />
             </div>
             <div className="col-span-5 grid grid-cols-5">
               <p className="col-span-3 border-2  text-center pl-[4px] sm:p-[2px]">
@@ -600,14 +614,16 @@ export default class DocumentExportPDF extends Component<DocumentExportPDFProps>
                 type="text"
                 className="col-span-2 border-2  pl-[4px] sm:p-[2px] text-center"
                 value={
-                  this.state.api ? this.state.api : this.formData?.api ?? ""
+                  this.state.apiPileLength
+                    ? this.state.apiPileLength
+                    : this.formData?.apiPileLength ?? ""
                 }
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  this.updateState("api", e.target.value);
+                  this.updateState("apiPileLength", e.target.value);
                   this.props.dispatch(
                     setState({
                       pileNo: this.props.pileId,
-                      api: e.target.value,
+                      apiPileLength: e.target.value,
                     })
                   );
                 }}

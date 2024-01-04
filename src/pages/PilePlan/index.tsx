@@ -495,7 +495,7 @@ const PilePlanPage: FunctionComponent<PilePlanPageProps> = () => {
         onFinishFailed={onFinishFailed}
         setOpen={setOpen}
         open={open}
-        title="Thêm Pile"
+        title="Add Pile"
       >
         <Space direction="vertical">
           <Form.Item<DataType>

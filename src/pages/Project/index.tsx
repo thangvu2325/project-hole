@@ -393,7 +393,7 @@ const ProjectPage: FunctionComponent<ProjectPageProps> = () => {
         onFinishFailed={onFinishFailed}
         setOpen={setOpen}
         open={open}
-        title="Thêm Project"
+        title="Add Project"
       >
         <Space direction="vertical">
           <Form.Item<DataType>

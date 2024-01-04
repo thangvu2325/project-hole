@@ -181,10 +181,10 @@ function Data() {
                 dataWillSet.ofBag = dataReaded[findex + 1][index];
                 break;
               case "API Pipe Size (mm)":
-                dataWillSet.apiPileLength = dataReaded[findex + 1][index];
+                dataWillSet.apiPileSize = dataReaded[findex + 1][index];
                 break;
               case "API Pipe Length (m)":
-                dataWillSet.api = dataReaded[findex + 1][index];
+                dataWillSet.apiPileLength = dataReaded[findex + 1][index];
                 break;
               case "Permanent Casing (m)":
                 dataWillSet.permanent = dataReaded[findex + 1][index];
@@ -665,7 +665,7 @@ function Data() {
                 }
               />
             </div>
-            <div className="col-6 mb-3">
+            <div className="col-4 mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 API Pipe Length (m)
               </label>
@@ -673,16 +673,33 @@ function Data() {
                 type="text"
                 className="form-control"
                 id="exampleFormControlInput1"
-                value={formData.api ?? ""}
+                value={formData.apiPileLength ?? ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    api: e.target.value,
+                    apiPileLength: e.target.value,
                   }))
                 }
               />
             </div>
-            <div className="col-6 mb-3">
+            <div className="col-4 mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">
+                API Pipe Size (mm)
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="exampleFormControlInput1"
+                value={formData.apiPileSize ?? ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    apiPileSize: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="col-4 mb-3">
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 Permanent Casing (m)
               </label>

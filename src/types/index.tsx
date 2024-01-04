@@ -43,6 +43,7 @@ export type FormBorelogDataType = {
   ofBag?: string;
   api?: string;
   apiPileLength?: string;
+  apiPileSize?: string;
   boringRig?: string;
   permanent?: string;
   deep?: Array<deepType>;

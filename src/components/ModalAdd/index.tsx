@@ -38,7 +38,7 @@ const ModalAdd: FunctionComponent<ModalAddProps> = ({
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        style={{ width: "fit-content", padding: "16px 32px" }}
+        style={{ width: "fit-content", padding: "4px 12px" }}
       >
         {children}
         <div className="text-right mt-4">
